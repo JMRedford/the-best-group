@@ -8,6 +8,16 @@ var parser = require('body-parser');
 var app = express();
 module.exports.app = app;
 
+
+/*
+route to handle websocket request
+*/
+app.ws('/', function(sock, req) {
+  ws.on('message', function(msg) {
+    //handle a message from the client
+  });
+});
+
 app.set("port", process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, '../client')));
 
