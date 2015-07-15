@@ -1,5 +1,6 @@
 var express = require('express');
 // var db = require('./db');
+var expressWs = require('express-ws')(app);
 var http = require('http');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -9,6 +10,7 @@ var parser = require('body-parser');
 
 var app = express();
 
+<<<<<<< HEAD
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -22,6 +24,11 @@ app.oauth = oauthserver({
 app.all('/oauth/token', app.oauth.grant());
 
 module.exports.app = app;
+=======
+app.get('/', function(req, res, next){
+  res.render('index.html');
+});
+>>>>>>> master
 
 app.get('/', app.oauth.authorize(), function(req, res) {
   res.send()
@@ -34,6 +41,8 @@ app.ws('/', function(sock, req) {
     //handle a message from the client
   });
 });
+
+module.exports.app = app;
 
 app.set("port", process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, '../client')));
