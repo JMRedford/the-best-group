@@ -1,0 +1,11 @@
+{
+  "name": "RealmOfTheMadGodClone",
+  "version": "0.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "express": "^4.10.1",
+    "express-ws": "^0.2.6",
+    "pg": "^3.4.2"
+  }
+}
