@@ -10,7 +10,24 @@ GET / HTTP/1.1
         Sec-WebSocket-Protocol: chat, superchat
         Sec-WebSocket-Version: 13
 */
-// var ws = new WebSocket('ws://127.0.0.1:3000');
+
+
+function startWebSocket() {
+  console.log("ran!")
+  window.ws = new WebSocket('ws://127.0.0.1:3000');
+}
+
+function initBoard() {
+
+}
+
 //use with ws.send(JSON.stringify(***))
 
-Game.start();
+//var sendInfo = function() {
+
+//}
+
+//Temperary start
+//Game.start();
+//setTimeout(sendInfo, 30)
+

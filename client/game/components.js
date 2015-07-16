@@ -16,7 +16,7 @@ Crafty.c('Grid', {
     if (x === undefined && y === undefined) {
       return { x: this.x/Game.map_grid.tile.width, y: this.y/Game.map_grid.tile.height }
     } else {
-      this.attr({ x: x * Game.map_grid.tile.width, y: y * Game.map_grid.tile.height });
+      this.attr({ x: Math.floor(x * Game.map_grid.tile.width), y: Math.floor(y * Game.map_grid.tile.height) });
       return this;
     }
   }
@@ -26,12 +26,12 @@ Crafty.c('Grid', {
 Crafty.c('Actor', {
   init: function() {
     this.requires('2D, Canvas, Grid');
-  },
+  }
 });
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Actor, Fourway, downWalk1,Collision')
+    this.requires('Actor, Fourway, downWalk1, Collision')
       .fourway(4)
       .stopOnSolids()
       .onHit("Village", this.visitVillage);
@@ -57,6 +57,14 @@ Crafty.c('Boundary', {
   init: function() {
     this.requires('Actor, Color, Solid')
     .color('rgb(20, 125, 40)');
+  }
+});
+
+
+Crafty.c('Rock', {
+  init: function() {
+    this.requires('Actor, Color, Solid')
+      .color('rgb(20, 185, 40)');
   }
 });
 

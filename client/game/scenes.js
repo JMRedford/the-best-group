@@ -1,6 +1,7 @@
 // Loading scene
 // -------------
 // Handles the loading of binary assets such as images and audio files
+
 Crafty.scene('Loading', function(){
   // Draw some text for the player to see in case the file
   //  takes a noticeable amount of time to load
@@ -55,6 +56,10 @@ Crafty.scene('Game', function() {
   // Player character, placed at 5, 5 on our grid
   this.player = Crafty.e('PlayerCharacter').at(5, 5);
   this.occupied[this.player.at().x][this.player.at().y] = true;
+
+  for (var rock = 0; rock < this.rocks.length;  rock++) {
+      Crafty.e('Rock').at(rocks[rock].loc[0], rocks[rock].loc[1])
+  }
 
   // Place a tree at every edge square on our grid of 16x16 tiles
   for (var x = 0; x < Game.map_grid.width; x++) {
