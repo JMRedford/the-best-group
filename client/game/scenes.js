@@ -57,8 +57,8 @@ Crafty.scene('Game', function() {
   this.player = Crafty.e('PlayerCharacter').at(5, 5);
   this.occupied[this.player.at().x][this.player.at().y] = true;
 
-  for (var rock = 0; rock < this.rocks.length;  rock++) {
-      Crafty.e('Rock').at(rocks[rock].loc[0], rocks[rock].loc[1])
+  for (var rock = 0; rock < Game.rocks.length;  rock++) {
+      Crafty.e('Rock').at(Game.rocks[rock].loc[0], Game.rocks[rock].loc[1])
   }
 
   // Place a tree at every edge square on our grid of 16x16 tiles

@@ -17,8 +17,8 @@ function startWebSocket() {
   window.ws = new WebSocket('ws://127.0.0.1:3000');
 }
 
-function initBoard() {
-
+function initBoard(data) {
+  Game.start(data)
 }
 
 //use with ws.send(JSON.stringify(***))
