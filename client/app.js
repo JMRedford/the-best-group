@@ -12,3 +12,5 @@ GET / HTTP/1.1
 */
 // var ws = new WebSocket('ws://127.0.0.1:3000');
 //use with ws.send(JSON.stringify(***))
+
+Game.start();
