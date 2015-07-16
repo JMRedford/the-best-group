@@ -37,13 +37,13 @@ app.ws('/', function(sock, req) {
 
 
 
-/*  Start up the server */
-var server = app.listen(3000, function() {
-  var host = server.address().address;
-  var port = server.address().port;
+// /*  Start up the server */
+// var server = app.listen(3000, function() {
+//   var host = server.address().address;
+//   var port = server.address().port;
 
-  console.log('Server listening on ', port);
-});
+//   console.log('Server listening on ', port);
+// });
 
 module.exports.app = app;
 

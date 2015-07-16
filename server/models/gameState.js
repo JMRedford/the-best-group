@@ -105,7 +105,7 @@ exports.addStaticObjects = function() {
            Math.random()*options.maxy]
   } while (!goodLoc);
 
-  newEnemy['loc'] = loc;
+  newStaticObject['loc'] = loc;
   exports.staticObjects.push(newStaticObject);
 }
 
@@ -147,6 +147,12 @@ exports.tickTime = function(){
   //  send data to player through their connections
 
 };
+
+exports.build = {
+  staticObjects: exports.staticObjects,
+  borderX: options.maxX,
+  borderY: options.maxy
+}
 
 exports.sendGameStateToPlayer = function(connection) {
 
