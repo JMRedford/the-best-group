@@ -9,7 +9,11 @@ var app = express();
 var expressWs = require('express-ws')(app);
 app.use(express.static('../client'));
 
+var playerKey = 0;
+//set up an options object that will contain
+// enemy amts and static object amts
 gameState.init();
+
 setInterval(gameState.tickTime, 30);
 
 
