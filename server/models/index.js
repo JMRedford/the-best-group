@@ -1,4 +1,4 @@
-var db = require('../db/connection.js');
+var db = require('../db');
 
 module.exports = {
   users: {
