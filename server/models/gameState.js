@@ -8,6 +8,7 @@ exports.enemies = [];
 
 exports.staticObjects = [];  
 // trees, rocks, etc initialized with loc coords
+// format: [{'loc':[x,y]},...]
 
 exports.playerShots = [];
 //format of playerAttack: {vector: [origin x, origin y, 
@@ -22,7 +23,7 @@ var options = {
   enemyAmt: 4,
   staticObjAmt: 6,
   maxX: 20,
-  maxy: 20,
+  maxY: 20,
   shotSpeed: 0.001 // this is (grid squares / milliseconds)
 };
 
@@ -37,7 +38,7 @@ exports.init = function(){
     exports.addEnemy();
   }
   for(var j = 0; j < options.staticObjAmt; j++) {
-    exports.addStaticObjects();
+    exports.addStaticObject();
   }
 };
 
@@ -54,8 +55,8 @@ exports.message = function(target_id, target_loc){
 
 exports.addPlayer = function(){
   var newPlayer = {};
-  var loc = [Math.random()*options.maxX,
-             Math.random()*options.maxy]
+  var loc = [Math.random()*(options.maxX - 2) + 1,
+             Math.random()*(options.maxY - 2) + 1]
    do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
@@ -63,8 +64,8 @@ exports.addPlayer = function(){
         goodLoc = false;
       }
     }
-    loc = [Math.random()*options.maxX,
-           Math.random()*options.maxy]
+    loc = [Math.random()*(options.maxX - 2) + 1,
+           Math.random()*(options.maxY - 2) + 1]
   } while (!goodLoc);
 
   newPlayer['loc'] = loc;
@@ -73,8 +74,8 @@ exports.addPlayer = function(){
 
 exports.addEnemy = function(){
   var newEnemy = {};
-  var loc = [Math.random()*options.maxX,
-             Math.random()*options.maxy]
+  var loc = [Math.random()*(options.maxX - 2) + 1,
+             Math.random()*(options.maxY - 2) + 1]
    do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.players.length; i++){
@@ -82,27 +83,27 @@ exports.addEnemy = function(){
         goodLoc = false;
       }
     }
-    loc = [Math.random()*options.maxX,
-           Math.random()*options.maxy]
+    loc = [Math.random()*(options.maxX - 2) + 1,
+           Math.random()*(options.maxY - 2) + 1]
   } while (!goodLoc);
 
   newEnemy['loc'] = loc;
   exports.enemies.push(newEnemy);
 };
 
-exports.addStaticObjects = function() {
+exports.addStaticObject = function() {
   var newStaticObject = {};
-  var loc = [Math.random()*options.maxX,
-             Math.random()*options.maxy]
-   do{ 
+  var loc = [Math.random()*(options.maxX - 2) + 1,
+             Math.random()*(options.maxY - 2) + 1]
+  do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.staticObjects.length; i++){
       if (distance(goodLoc, exports.staticObjects[i].loc) < 50) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*options.maxX,
-           Math.random()*options.maxy]
+    loc = [Math.random()*(options.maxX - 2) + 1,
+           Math.random()*(options.maxY - 2) + 1]
   } while (!goodLoc);
 
   newStaticObject['loc'] = loc;
@@ -151,7 +152,7 @@ exports.tickTime = function(){
 exports.build = {
   staticObjects: exports.staticObjects,
   borderX: options.maxX,
-  borderY: options.maxy
+  borderY: options.maxY
 }
 
 exports.sendGameStateToPlayer = function(connection) {
@@ -182,7 +183,6 @@ exports.sendGameStateToPlayer = function(connection) {
   data.enemyShots = enemyShots;
 
   connection.send(JSON.stringify(data));
-
 };
 
 
