@@ -7,7 +7,7 @@ var gameState = require('./models/gameState.js');
 var app = express();
 
 var expressWs = require('express-ws')(app);
-app.use(express.static('../client'));
+app.use(express.static(__dirname + '/../client'));
 
 var playerKey = 0;
 //set up an options object that will contain
@@ -16,6 +16,13 @@ gameState.init();
 
 setInterval(gameState.tickTime, 30);
 
+app.get('/', function(req, res) {
+  res.render('index.html');
+})
+
+app.get('/start', function(req, res) {
+  res.json(gameState.build);
+});
 
 /* Route to handle websocket request */
 app.ws('/', function(connection, req) {
@@ -24,14 +31,8 @@ app.ws('/', function(connection, req) {
   });
   setInterval(function(){
     gameState.sendGameStateToPlayer(connection);
-  },30)
+  }, 30)
 });
 
-
-var server = app.listen(3000, function() {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Server listening on ', port);
-});
-
+app.listen(process.env.PORT || 3000);
+console.log('Server listening on 3000')
