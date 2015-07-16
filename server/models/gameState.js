@@ -1,9 +1,6 @@
 var exports = module.exports = {};
 
 //server side game state storage here
-exports.maxX = 20;  //width of game world in blocks
-exports.maxY = 20;  //height of game world in blocks
-
 exports.players = [];
 //player: {'id':#, 'conn':conn, 'loc':loc}
 
@@ -20,12 +17,13 @@ exports.enemyShots = [];
 
 // build out an options that sets 
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
+
 var options = {
   enemyAmt: 4,
   staticObjAmt: 6,
   maxX: 20,
   maxy: 20,
-  shotSpeed: 0.001 // this is grid squares / millisecond
+  shotSpeed: 0.001 // this is (grid squares / milliseconds)
 };
 
 
@@ -125,7 +123,12 @@ exports.checkCollisions = function(enemy, staticObject){
   return collided;
 };
 
-exports.vectorTransform = function(x, y, dx, dy, t) {
+exports.vectorTransform = function(shot) {
+  var x = shot[0];
+  var y = shot[1];
+  var dx = shot[2];
+  var dy = shot[3];
+  var t = shot[4];
   var time = Date.now();
   var dt = time - t;
   var result = [
@@ -138,23 +141,39 @@ exports.vectorTransform = function(x, y, dx, dy, t) {
 
 exports.tickTime = function(){
   //move enemies around and check for collisions
+  // main server refresh loop
+
+  // loop through the players
+  //  send data to player through their connections
 
 };
 
 exports.sendGameStateToPlayer = function(connection) {
+
   var playerData = [];
   var enemyData = [];
+  var playerShots = [];
+  var enemyShots = [];
+
   var data = {};
+
   for(var i = 0; i < exports.players; i++) {
     playerData.push([exports.players[i].id , exports.players[i].loc]);
   }
   for(var j = 0; j < exports.enemies; j++) {
     enemyData.push(exports.enemies[j].loc);
   }
+  for(var k = 0; k < exports.enemyShots; k++) {
+    enemyShots.push(exports.vectorTransform(exports.enemyShots[k]));    
+  }
+  for(var l = 0; l < exports.enemies; l++) {
+    playerShots.push(exports.vectorTransform(exports.playerShots[l]));
+  }
+
   data.players = playerData;
   data.enemies = enemyData;
-  data.enemyShots = exports.enemyShots;
-  data.playerShots = exports.playerShots;
+  data.playerShots = playerShots;
+  data.enemyShots = enemyShots;
 
   connection.send(JSON.stringify(data));
 
