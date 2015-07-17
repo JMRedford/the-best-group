@@ -17,7 +17,7 @@ function startWebSocket() {
   ws.onopen = function(e) {
     setInterval(sendUpdates, 100)
     ws.onmessage = function(e) {
-      updateBoard(e)
+      updateBoard(e);
     }
   }
 }

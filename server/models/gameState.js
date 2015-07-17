@@ -55,17 +55,17 @@ exports.message = function(target_id, target_loc){
 
 exports.addPlayer = function(){
   var newPlayer = {};
-  var loc = [Math.random()*(options.maxX - 2) + 1,
-             Math.random()*(options.maxY - 2) + 1]
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
    do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
-      if (distance(goodLoc, exports.enemies[i].loc) < 50) {
+      if (distance(loc, exports.enemies[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 2) + 1,
-           Math.random()*(options.maxY - 2) + 1]
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
   } while (!goodLoc);
 
   newPlayer['loc'] = loc;
@@ -74,17 +74,17 @@ exports.addPlayer = function(){
 
 exports.addEnemy = function(){
   var newEnemy = {};
-  var loc = [Math.random()*(options.maxX - 2) + 1,
-             Math.random()*(options.maxY - 2) + 1]
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
    do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.players.length; i++){
-      if (distance(goodLoc, exports.players[i].loc) < 50) {
+      if (distance(loc, exports.players[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 2) + 1,
-           Math.random()*(options.maxY - 2) + 1]
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
   } while (!goodLoc);
 
   newEnemy['loc'] = loc;
@@ -93,17 +93,17 @@ exports.addEnemy = function(){
 
 exports.addStaticObject = function() {
   var newStaticObject = {};
-  var loc = [Math.random()*(options.maxX - 2) + 1,
-             Math.random()*(options.maxY - 2) + 1]
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
   do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.staticObjects.length; i++){
-      if (distance(goodLoc, exports.staticObjects[i].loc) < 50) {
+      if (distance(loc, exports.staticObjects[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 2) + 1,
-           Math.random()*(options.maxY - 2) + 1]
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
   } while (!goodLoc);
 
   newStaticObject['loc'] = loc;
@@ -130,7 +130,7 @@ exports.vectorTransform = function(shot) {
   var dx = shot[2];
   var dy = shot[3];
   var t = shot[4];
-  var time = Date.now();
+  var time = Date.now() % 1000000;
   var dt = time - t;
   var result = [
     x + (dt * dx) * exports.options.shotSpeed,
@@ -184,6 +184,56 @@ exports.sendGameStateToPlayer = function(connection) {
 
   connection.send(JSON.stringify(data));
 };
+
+/* ----------------  handle data from websockets -------------------- */
+
+exports.handleUpdate = function(update) {
+  var data = JSON.parse(update);
+  
+  // add a player id that is incremented on creation
+
+  // handle movement and shot
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
