@@ -34,7 +34,7 @@ Crafty.c('PlayerCharacter', {
     this.requires('Actor, Fourway, downWalk1, Collision')
       .fourway(4)
       .stopOnSolids()
-      .onHit("Village", this.visitVillage);
+
   },
 
     stopOnSolids: function() {

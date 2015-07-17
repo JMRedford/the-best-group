@@ -13,21 +13,25 @@ GET / HTTP/1.1
 
 
 function startWebSocket() {
-  console.log("ran!")
   window.ws = new WebSocket('ws://127.0.0.1:3000');
+  ws.onopen = function(e) {
+    setInterval(sendUpdates, 30)
+    ws.onmessage = function(e) {
+      updateBoard(e)
+    }
+  }
 }
 
 function initBoard(data) {
   Game.start(data)
+  startWebSocket();
 }
 
-//use with ws.send(JSON.stringify(***))
+function sendUpdates() {
+  window.ws.send(JSON.stringify(window.player.at()))
+}
 
-//var sendInfo = function() {
-
-//}
-
-//Temperary start
-//Game.start();
-//setTimeout(sendInfo, 30)
+function updateBoard(msg) {
+  var data = JSON.parse(msg);
+}
 
