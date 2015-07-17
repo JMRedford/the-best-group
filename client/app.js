@@ -15,7 +15,7 @@ GET / HTTP/1.1
 function startWebSocket() {
   window.ws = new WebSocket('ws://127.0.0.1:3000');
   ws.onopen = function(e) {
-    setInterval(sendUpdates, 30)
+    setInterval(sendUpdates, 100)
     ws.onmessage = function(e) {
       updateBoard(e)
     }
@@ -28,10 +28,14 @@ function initBoard(data) {
 }
 
 function sendUpdates() {
-  window.ws.send(JSON.stringify(window.player.at()))
+  var data = {
+      loc: window.player.at(),
+      time: Date.now()
+              }
+  window.ws.send(JSON.stringify(data))
 }
 
 function updateBoard(msg) {
-  var data = JSON.parse(msg);
+  var data = JSON.parse(msg.data);
 }
 
