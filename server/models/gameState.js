@@ -2,7 +2,7 @@ var exports = module.exports = {};
 
 //server side game state storage here
 exports.players = [];
-//player: {'id':#, 'conn':conn, 'loc':loc}
+//player: {'pid':#, 'conn':conn, 'loc':loc}
 
 exports.enemies = [];
 
@@ -16,6 +16,7 @@ exports.playerShots = [];
 //                         time : timestamp (milisecs?)}
 exports.enemyShots = [];
 
+var playerIdIncrementer = 0;
 // build out an options that sets
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
 
@@ -40,15 +41,16 @@ exports.init = function(){
   for(var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
+
 };
 
 // implement exports.blockSize
 
-exports.message = function(target_id, target_loc){
+exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
   for(var i = 0; i < exports.players.length; i++) {
-    if(exports.players[i]['id'] === target_id) {
-      exports.players[i]['loc'] === target_loc;
+    if(exports.players[i].pid === target_id) {
+      exports.players[i].loc === target_loc;
     }
   }
 };
@@ -56,20 +58,7 @@ exports.message = function(target_id, target_loc){
 exports.addPlayer = function(ws){
   var newPlayer = {};
   newPlayer.conn = ws;
-  var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
-   do{
-    var goodLoc = true;
-    for (var i = 0; i < exports.enemies.length; i++){
-      if (distance(loc, exports.enemies[i].loc) < 1.5) {
-        goodLoc = false;
-      }
-    }
-    loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
-  } while (!goodLoc);
-
-  newPlayer['loc'] = loc;
+  newPlayer.pid = exports.build.pid;
   exports.players.push(newPlayer);
 };
 
@@ -157,11 +146,6 @@ exports.tickTime = function(){
   }
 };
 
-exports.build = {
-  staticObjects: exports.staticObjects,
-  borderX: options.maxX,
-  borderY: options.maxY
-}
 
 exports.sendGameStateToPlayer = function(connection) {
 
@@ -173,7 +157,7 @@ exports.sendGameStateToPlayer = function(connection) {
   var data = {};
 
   for(var i = 0; i < exports.players; i++) {
-    playerData.push([exports.players[i].id , exports.players[i].loc]);
+    playerData.push([exports.players[i].pid , exports.players[i].loc]);
   }
   for(var j = 0; j < exports.enemies; j++) {
     enemyData.push(exports.enemies[j].loc);
@@ -192,6 +176,31 @@ exports.sendGameStateToPlayer = function(connection) {
 
   connection.send(JSON.stringify(data));
 };
+
+exports.build = {
+  staticObjects: exports.staticObjects,
+  borderX: options.maxX,
+  borderY: options.maxY,
+}
+
+exports.addPosAndIdToBuild = function(){
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
+   do{
+    var goodLoc = true;
+    for (var i = 0; i < exports.enemies.length; i++){
+      if (distance(loc, exports.enemies[i].loc) < 1.5) {
+        goodLoc = false;
+      }
+    }
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
+  } while (!goodLoc);
+  exports.build.playerStartX = loc[0];
+  exports.build.playerStartY = loc[1];
+
+  exports.build.pid = ++playerIdIncrementer;
+}
 
 /* ----------------  handle data from websockets -------------------- */
 
