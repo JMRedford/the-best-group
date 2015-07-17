@@ -1,16 +1,15 @@
 // Loading scene
 // -------------
 // Handles the loading of binary assets such as images and audio files
-
+window.fireballs = [];
 Crafty.scene('Loading', function(){
   // Draw some text for the player to see in case the file
   //  takes a noticeable amount of time to load
   Crafty.e('2D, DOM, Text')
     .text('Loading...')
     .attr({ x: 0, y: Game.height()/2 - 24, w: Game.width() });
-
   // Load our sprite map image
-  Crafty.load(['sprites/gokuSprite.png'], function(){
+  Crafty.load({"images":['sprites/gokuSprite.png', 'sprites/FB.png']}, function(){
     // Once the image is loaded...
 
     // Define the individual sprites in the image
@@ -33,6 +32,20 @@ Crafty.scene('Loading', function(){
      leftWalk2 :    [3, 2]
     });
 
+    Crafty.sprite(32, 'sprites/FB.png', {
+      FBdown1: [0,0],
+      FBdown2: [0,1],
+      FBdown3: [0,2],
+      FBleft1: [1,0],
+      FBleft2: [1,1],
+      FBleft3: [1,2],
+      FBright1: [2,0],
+      FBright2: [2,1],
+      FBright3: [2,2],
+      FBup1: [3,0],
+      FBup2: [3,1],
+      FBup3: [3,2]
+    });
     // Now that our sprites are ready to draw, start the game
     Crafty.scene('Game');
   })
@@ -44,6 +57,8 @@ Crafty.scene('Loading', function(){
 // -------------
 // Runs the core gameplay loop
 Crafty.scene('Game', function() {
+
+  console.log('started game scene')
   // A 2D array to keep track of all occupied tiles
   this.occupied = new Array(Game.map_grid.width);
   for (var i = 0; i < Game.map_grid.width; i++) {
@@ -54,12 +69,64 @@ Crafty.scene('Game', function() {
   }
 
   // Player character, placed at 5, 5 on our grid
+  console.log('making player')
+  window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(5,5);
+  player.direction = 'down';
 
-  window.player = Crafty.e('PlayerCharacter').at(5, 5);
   player.bind("KeyDown", function(e) {
-    if (e.key==Crafty.keys.SPACE) {
-      console.log("Spacebar")
+    switch (e.key){
+      case Crafty.keys.SPACE:
+        var fireball = Crafty.e('Fireball, SpriteAnimation, FBdown1').at(player.at().x,player.at().y);
+        switch(player.direction){
+          case 'up':
+            fireball.animate('flyUp',-1);
+            break;
+          case 'down':
+            fireball.animate('flyDown',-1);
+            break;
+          case 'right':
+            fireball.animate('flyRight',-1);
+            break;
+          case 'left':
+            fireball.animate('flyLeft',-1);
+            break;
+        }
+        break;
+      case Crafty.keys.UP_ARROW || Crafty.keys.W:
+        this.animate('walkUp',-1);
+        player.direction = 'up';
+        break;
+      case Crafty.keys.DOWN_ARROW || Crafty.keys.S:
+        this.animate('walkDown',-1);
+        player.direction = 'down';
+        break;
+      case Crafty.keys.LEFT_ARROW || Crafty.keys.A:
+        this.animate('walkLeft',-1);
+        player.direction = 'left';
+        break;
+      case Crafty.keys.RIGHT_ARROW || Crafty.keys.D:
+        this.animate('walkRight',-1);
+        player.direction = 'right';
+        break;
     }
+
+  });
+  window.player.bind("KeyUp", function(e){
+    switch (e.key){
+      case Crafty.keys.UP_ARROW || Crafty.keys.W:
+        this.animate('up');
+        break;
+      case Crafty.keys.DOWN_ARROW || Crafty.keys.S:
+        this.animate('down');
+        break;
+      case Crafty.keys.LEFT_ARROW || Crafty.keys.A:
+        this.animate('left');
+        break;
+      case Crafty.keys.RIGHT_ARROW || Crafty.keys.D:
+        this.animate('right');
+        break;
+    }
+
   })
 
   this.occupied[window.player.at().x][window.player.at().y] = true;

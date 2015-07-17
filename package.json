@@ -4,6 +4,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.9.2",
+    "bower": "^1.4.1",
     "express": "^4.10.1",
     "express-ws": "^0.2.6",
     "node-oauth2-server": "^2.0.2",
