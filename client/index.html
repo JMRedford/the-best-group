@@ -17,7 +17,6 @@
    <script>
       $('#startButton').click(function() {
         $('#startButton').remove();
-        console.log("Clicked ")
         $.ajax({ type: 'GET',
                  url: '/start',
                  success: function(data) {
