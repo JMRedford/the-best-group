@@ -151,11 +151,11 @@ exports.checkCollisions = function(enemy, staticObject){
 };
 
 exports.vectorTransform = function(shot) {
-  var x = shot[0];
-  var y = shot[1];
-  var dx = shot[2];
-  var dy = shot[3];
-  var t = shot[4];
+  var x = shot.loc[0];
+  var y = shot.loc[1];
+  var dx = shot.delta[0];
+  var dy = shot.delta[1];
+  var t = shot.time;
   var time = Date.now() % 1000000;
   var dt = time - t;
   var result = [
@@ -171,6 +171,13 @@ exports.tickTime = function(){
   // main server refresh loop
   for (var i = 0; i < exports.enemies.length; i++){
     exports.randomWalk(exports.enemies[i]);
+    if (Math.random() < 0.001){
+      //make an enemy shot
+      var newShot = {};
+      newShot.loc = exports.enemies[i].loc;
+      newShot.delta = [exports.enemies[i].delta[0]*3,exports.enemies[i].delta[1]*3];
+      newShot.time = Date.now()%1000000;
+    }
   }
 
   // loop through the players
@@ -183,6 +190,7 @@ exports.tickTime = function(){
       exports.players.splice(i,1);
     }
   }
+
 };
 
 
