@@ -1,3 +1,27 @@
+window.fireballs = {
+  fbID: 0,
+  getID: function() {
+    this.fbID++
+    if (this.fbID>99) {
+      this.fbID=0;
+    }
+    return this.fbID;
+  },
+  addFireball: function (craftyObj, ID) {
+    this.storage[ID] = craftyObj;
+  },
+  removeFireball: function (ID){
+    this.storage[ID].destroy();
+    delete this.storage[ID];
+  },
+
+  storage: {}
+};
+
+window.userID = 23;
+window.enemies = {};
+window.newFireballs = [];
+
 Game = {
   // This defines our grid's size and the size of each of its tiles
   map_grid: {
