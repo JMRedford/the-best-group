@@ -70,7 +70,7 @@ Crafty.scene('Game', function() {
 
   // Player character, placed at 5, 5 on our grid
   console.log('making player')
-  window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(5,5);
+  window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at.(playerStartLoc[0], playerStartLoc[1]);
   player.direction = 'down';
 
 

@@ -36,7 +36,6 @@ function sendUpdates() {
       nfb : newFireballs
   }
   newFireballs = [];
-  console.log(data);
   window.ws.send(JSON.stringify(data));
 }
 
