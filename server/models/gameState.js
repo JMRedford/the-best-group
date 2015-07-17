@@ -2,9 +2,10 @@ var exports = module.exports = {};
 
 //server side game state storage here
 exports.players = [];
-//player: {'pid':#, 'conn':conn, 'loc':loc}
+//player: {'pid':#, 'conn':conn, 'loc':[#,#]}
 
 exports.enemies = [];
+//enemy: {'loc':[#,#], delta:[#,#]}
 
 exports.staticObjects = [];
 // trees, rocks, etc initialized with loc coords
@@ -73,13 +74,46 @@ exports.addEnemy = function(){
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
+    loc = [Math.random()*(options.maxX - 3) + 1,
+           Math.random()*(options.maxY - 3) + 1]
   } while (!goodLoc);
 
   newEnemy['loc'] = loc;
+  newEnemy.delta = [0,0];
   exports.enemies.push(newEnemy);
 };
+
+exports.randomWalk = function(enemy){
+  var max = 0.08;
+  var oldDx = enemy.delta[0];
+  var oldDy = enemy.delta[1];
+
+  var newDx = oldDx + Math.random()*0.01 - 0.005;
+  newDx = Math.max(newDx, -1*max);
+  newDx = Math.min(newDx, max);
+
+  var newDy = oldDy + Math.random()*0.01 - 0.005;
+  newDy = Math.max(newDy, -1*max);
+  newDy = Math.min(newDy, max);
+
+  enemy.delta = [newDx,newDy];
+  enemy.loc = [enemy.loc[0]+newDx, enemy.loc[1]+newDy];
+  if (enemy.loc[0] < 1 || enemy.loc[0] > 18){
+    enemy.loc[0] = enemy.loc[0] - 2*newDx;
+  }
+  if (enemy.loc[1] < 1 || enemy.loc[1] > 18){
+    enemy.loc[1] = enemy.loc[1] - 2*newDy;
+  }
+
+  // for(var i = 0; i < exports.staticObjects.length; i++){
+  //   if (exports.checkCollisions(enemy, exports.staticObjects[i])){
+  //     enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
+  //   }
+  // }
+  if (Math.random() < 0.01) {
+    console.log(enemy.loc[0] +' '+enemy.loc[1]);
+  }
+}
 
 exports.addStaticObject = function() {
   var newStaticObject = {};
@@ -133,6 +167,9 @@ exports.vectorTransform = function(shot) {
 exports.tickTime = function(){
   //move enemies around and check for collisions
   // main server refresh loop
+  for (var i = 0; i < exports.enemies.length; i++){
+    exports.randomWalk(exports.enemies[i]);
+  }
 
   // loop through the players
   //  send data to player through their connections
@@ -178,6 +215,7 @@ exports.sendGameStateToPlayer = function(connection) {
 };
 
 exports.build = {
+  enemies: exports.enemies,
   staticObjects: exports.staticObjects,
   borderX: options.maxX,
   borderY: options.maxY,
