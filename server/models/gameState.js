@@ -185,5 +185,55 @@ exports.sendGameStateToPlayer = function(connection) {
   connection.send(JSON.stringify(data));
 };
 
+/* ----------------  handle data from websockets -------------------- */
+
+exports.handleUpdate = function(update) {
+  var data = JSON.parse(update);
+  
+  // add a player id that is incremented on creation
+
+  // handle movement and shot
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

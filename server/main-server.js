@@ -26,8 +26,9 @@ app.get('/start', function(req, res) {
 
 /* Route to handle websocket request */
 app.ws('/', function(connection, req) {
-  ws.on('message', function(msg) {
-    gameState.message(msg.data.id, msg.data.loc)
+  console.log('websockets request')
+  ws.on('message', function(update) {
+    gameState.handleUpdate(update.data.id, update.data.loc)
   });
   setInterval(function(){
     gameState.sendGameStateToPlayer(connection);
