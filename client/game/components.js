@@ -31,13 +31,22 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Actor, Fourway, downWalk1, Collision')
+    this.requires('Actor, Fourway, Collision, down, SpriteAnimation')
       .fourway(4)
       .stopOnSolids()
+      .reel("walkDown", 500, 1, 0, 2)
+      .reel("walkLeft", 500, 1, 3, 2)
+      .reel("walkRight", 500, 1, 2, 2)
+      .reel("walkUp", 500, 1 , 1, 2)
+      .reel('up', 1, 0, 1, 1)
+      .reel('down', 1, 0, 0, 1)
+      .reel('right', 1, 0, 2, 1)
+      .reel('left', 1, 0, 3, 1)
+
 
   },
 
-    stopOnSolids: function() {
+  stopOnSolids: function() {
     this.onHit('Solid', this.stopMovement);
 
     return this;
@@ -67,4 +76,25 @@ Crafty.c('Rock', {
       .color('rgb(20, 185, 40)');
   }
 });
+
+Crafty.c('Fireball', {
+  init: function() {
+    this.requires('Actor, SpriteAnimation, Collision, FBdown1').destroyOnSolids();
+    this.reel('flyRight', 500, 0, 2, 3);
+    this.reel('flyDown', 500, 0, 0, 3);
+    this.reel('flyLeft', 500, 0, 1, 3);
+    this.reel('flyUp', 500, 0, 3, 3);
+  },
+
+  destroyOnSolids: function(){
+    this.onHit('Solid', this.destroy());
+  }
+
+});
+
+
+
+
+
+
 
