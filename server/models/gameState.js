@@ -55,17 +55,17 @@ exports.message = function(target_id, target_loc){
 
 exports.addPlayer = function(){
   var newPlayer = {};
-  var loc = [Math.random()*(options.maxX - 2) + 1,
-             Math.random()*(options.maxY - 2) + 1]
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
    do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
-      if (distance(goodLoc, exports.enemies[i].loc) < 50) {
+      if (distance(loc, exports.enemies[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 2) + 1,
-           Math.random()*(options.maxY - 2) + 1]
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
   } while (!goodLoc);
 
   newPlayer['loc'] = loc;
@@ -74,17 +74,17 @@ exports.addPlayer = function(){
 
 exports.addEnemy = function(){
   var newEnemy = {};
-  var loc = [Math.random()*(options.maxX - 2) + 1,
-             Math.random()*(options.maxY - 2) + 1]
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
    do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.players.length; i++){
-      if (distance(goodLoc, exports.players[i].loc) < 50) {
+      if (distance(loc, exports.players[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 2) + 1,
-           Math.random()*(options.maxY - 2) + 1]
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
   } while (!goodLoc);
 
   newEnemy['loc'] = loc;
@@ -93,17 +93,17 @@ exports.addEnemy = function(){
 
 exports.addStaticObject = function() {
   var newStaticObject = {};
-  var loc = [Math.random()*(options.maxX - 2) + 1,
-             Math.random()*(options.maxY - 2) + 1]
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
   do{ 
     var goodLoc = true;
     for (var i = 0; i < exports.staticObjects.length; i++){
-      if (distance(goodLoc, exports.staticObjects[i].loc) < 50) {
+      if (distance(loc, exports.staticObjects[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 2) + 1,
-           Math.random()*(options.maxY - 2) + 1]
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
   } while (!goodLoc);
 
   newStaticObject['loc'] = loc;
