@@ -19,7 +19,7 @@ window.fireballs = {
 };
 
 window.enemies = {
-  addEnemy: function(){},
+  addEnemy: function(enemy){},
   removeEnemy: function(){},
   storage: {}
 };

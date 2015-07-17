@@ -59,18 +59,10 @@ Crafty.scene('Loading', function(){
 Crafty.scene('Game', function() {
 
   console.log('started game scene')
-  // A 2D array to keep track of all occupied tiles
-  this.occupied = new Array(Game.map_grid.width);
-  for (var i = 0; i < Game.map_grid.width; i++) {
-    this.occupied[i] = new Array(Game.map_grid.height);
-    for (var y = 0; y < Game.map_grid.height; y++) {
-      this.occupied[i][y] = false;
-    }
-  }
 
   // Player character, placed at 5, 5 on our grid
   console.log('making player')
-  window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at.(playerStartLoc[0], playerStartLoc[1]);
+  window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(playerStartLoc[0], playerStartLoc[1]);
   player.direction = 'down';
 
 
@@ -135,7 +127,7 @@ Crafty.scene('Game', function() {
 
   })
 
-  this.occupied[window.player.at().x][window.player.at().y] = true;
+
 
   for (var rock = 0; rock < Game.rocks.length;  rock++) {
       Crafty.e('Rock').at(Game.rocks[rock].loc[0], Game.rocks[rock].loc[1])
@@ -149,7 +141,6 @@ Crafty.scene('Game', function() {
       if (at_edge) {
         // Place a tree entity at the current tile
         Crafty.e('Boundary').at(x, y);
-        this.occupied[x][y] = true;
       }
     }
   }

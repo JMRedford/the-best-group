@@ -112,9 +112,6 @@ exports.randomWalk = function(enemy){
     }
   }
 
-  if (Math.random() < 0.01) {
-    console.log(enemy.loc[0] +' '+enemy.loc[1]);
-  }
 }
 
 exports.addStaticObject = function() {
@@ -183,12 +180,12 @@ exports.tickTime = function(){
   // loop through the players
   //  send data to player through their connections
   for (var i = exports.players.length - 1; i >= 0; i--){
-    try{
-      exports.sendGameStateToPlayer(player.conn);
-    } catch (err){
-      //remove player from array
-      exports.players.splice(i,1);
-    }
+    exports.sendGameStateToPlayer(exports.players[i].conn);
+    // try{
+    // } catch (err){
+    //   //remove player from array
+    //   exports.players.splice(i,1);
+    // }
   }
 
 };
@@ -203,16 +200,16 @@ exports.sendGameStateToPlayer = function(connection) {
 
   var data = {};
 
-  for(var i = 0; i < exports.players; i++) {
+  for(var i = 0; i < exports.players.length; i++) {
     playerData.push([exports.players[i].pid , exports.players[i].loc]);
   }
-  for(var j = 0; j < exports.enemies; j++) {
+  for(var j = 0; j < exports.enemies.length; j++) {
     enemyData.push(exports.enemies[j].loc);
   }
-  for(var k = 0; k < exports.enemyShots; k++) {
+  for(var k = 0; k < exports.enemyShots.length; k++) {
     enemyShots.push(exports.vectorTransform(exports.enemyShots[k]));
   }
-  for(var l = 0; l < exports.enemies; l++) {
+  for(var l = 0; l < exports.playerShots.length; l++) {
     playerShots.push(exports.vectorTransform(exports.playerShots[l]));
   }
 
