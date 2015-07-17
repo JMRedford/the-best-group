@@ -1,7 +1,7 @@
 // Loading scene
 // -------------
 // Handles the loading of binary assets such as images and audio files
-window.fireballs = [];
+
 Crafty.scene('Loading', function(){
   // Draw some text for the player to see in case the file
   //  takes a noticeable amount of time to load
@@ -79,6 +79,10 @@ Crafty.scene('Game', function() {
       case Crafty.keys.SPACE:
         var fireball = Crafty.e('Fireball, SpriteAnimation, FBdown1')
             .at(player.at().x,player.at().y);
+        var ID = userID + fireballs.getID();
+        fireballs.addFireball(fireball, ID);
+        newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: player.direction});
+
         switch(player.direction){
           case 'up':
             fireball.animate('flyUp',-1);

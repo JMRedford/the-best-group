@@ -20,9 +20,7 @@
         $.ajax({ type: 'GET',
                  url: '/start',
                  success: function(data) {
-                   console.log("success!", data)
                    initBoard(data);
-                   startWebSocket();
                  }
         })
       })
