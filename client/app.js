@@ -28,10 +28,14 @@ function initBoard(data) {
 }
 
 function sendUpdates() {
-  window.ws.send(JSON.stringify(window.player.at()))
+  var data = {
+      loc: window.player.at(),
+      time: Date.now()
+              }
+  window.ws.send(JSON.stringify(data))
 }
 
 function updateBoard(msg) {
-  var data = JSON.parse(msg);
+  var data = JSON.parse(msg.data);
 }
 

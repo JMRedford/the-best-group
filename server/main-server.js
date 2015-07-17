@@ -25,13 +25,13 @@ app.get('/start', function(req, res) {
 });
 
 /* Route to handle websocket request */
-app.ws('/', function(connection, req) {
-  console.log('websockets request')
+app.ws('/', function(ws, req) {
   ws.on('message', function(msg) {
-    gameState.handleUpdate(msg.data.id, msg.data.loc)
+    var data = JSON.parse(msg)
+    gameState.message(data.loc)
   });
   setInterval(function(){
-    gameState.sendGameStateToPlayer(connection);
+    gameState.sendGameStateToPlayer(ws);
   }, 30)
 });
 
