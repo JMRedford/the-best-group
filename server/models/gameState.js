@@ -209,9 +209,9 @@ exports.sendGameStateToPlayer = function(connection) {
   }
 
   data.players = playerData;
-  data.enemies = enemyData;
   data.playerShots = playerShots;
   data.enemyShots = enemyShots;
+  data.enemies = enemyData;
 
   connection.send(JSON.stringify(data));
 };
