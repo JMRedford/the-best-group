@@ -54,8 +54,15 @@ Crafty.scene('Game', function() {
   }
 
   // Player character, placed at 5, 5 on our grid
-  this.player = Crafty.e('PlayerCharacter').at(5, 5);
-  this.occupied[this.player.at().x][this.player.at().y] = true;
+
+  window.player = Crafty.e('PlayerCharacter').at(5, 5);
+  player.bind("KeyDown", function(e) {
+    if (e.key==Crafty.keys.SPACE) {
+      console.log("Spacebar")
+    }
+  })
+
+  this.occupied[window.player.at().x][window.player.at().y] = true;
 
   for (var rock = 0; rock < Game.rocks.length;  rock++) {
       Crafty.e('Rock').at(Game.rocks[rock].loc[0], Game.rocks[rock].loc[1])
