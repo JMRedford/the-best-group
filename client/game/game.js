@@ -18,9 +18,15 @@ window.fireballs = {
   storage: {}
 };
 
+window.enemies = {
+  addEnemy: function(enemy){},
+  removeEnemy: function(){},
+  storage: {}
+};
+
 window.userID = 23;
-window.enemies = {};
 window.newFireballs = [];
+window.playerStartLoc = [5,5];
 
 Game = {
   // This defines our grid's size and the size of each of its tiles
@@ -57,6 +63,8 @@ Game = {
     this.map_grid.width  = data.borderX;
     this.map_grid.height = data.borderY;
     this.rocks  = data.staticObjects;
+    playerStartLoc = [data.playerStartX, data.playerStartY];
+    userID = data.pid;
 
     Crafty.init(Game.width(), Game.height());
     Crafty.background('rgb(249, 223, 125)');

@@ -19,6 +19,7 @@ function startWebSocket() {
     console.log('socket open')
     setInterval(sendUpdates, 100)
     ws.onmessage = function(e) {
+      console.log('message!')
       updateBoard(e);
     }
   }
@@ -35,9 +36,8 @@ function sendUpdates() {
       time: Date.now(),
       nfb : newFireballs
   }
-  newFireballs = [];
-  console.log(data);
   window.ws.send(JSON.stringify(data));
+  newFireballs = [];
 }
 
 function updateBoard(msg) {
