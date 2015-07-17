@@ -2,9 +2,10 @@ var exports = module.exports = {};
 
 //server side game state storage here
 exports.players = [];
-//player: {'id':#, 'conn':conn, 'loc':loc}
+//player: {'pid':#, 'conn':conn, 'loc':[#,#]}
 
 exports.enemies = [];
+//enemy: {'loc':[#,#], delta:[#,#]}
 
 exports.staticObjects = [];
 // trees, rocks, etc initialized with loc coords
@@ -16,6 +17,7 @@ exports.playerShots = [];
 //                         time : timestamp (milisecs?)}
 exports.enemyShots = [];
 
+var playerIdIncrementer = 0;
 // build out an options that sets
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
 
@@ -40,15 +42,16 @@ exports.init = function(){
   for(var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
+
 };
 
 // implement exports.blockSize
 
-exports.message = function(target_id, target_loc){
+exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
   for(var i = 0; i < exports.players.length; i++) {
-    if(exports.players[i]['id'] === target_id) {
-      exports.players[i]['loc'] === target_loc;
+    if(exports.players[i].pid === target_id) {
+      exports.players[i].loc === target_loc;
     }
   }
 };
@@ -56,20 +59,7 @@ exports.message = function(target_id, target_loc){
 exports.addPlayer = function(ws){
   var newPlayer = {};
   newPlayer.conn = ws;
-  var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
-   do{
-    var goodLoc = true;
-    for (var i = 0; i < exports.enemies.length; i++){
-      if (distance(loc, exports.enemies[i].loc) < 1.5) {
-        goodLoc = false;
-      }
-    }
-    loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
-  } while (!goodLoc);
-
-  newPlayer['loc'] = loc;
+  newPlayer.pid = exports.build.pid;
   exports.players.push(newPlayer);
 };
 
@@ -84,13 +74,48 @@ exports.addEnemy = function(){
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
+    loc = [Math.random()*(options.maxX - 3) + 1,
+           Math.random()*(options.maxY - 3) + 1]
   } while (!goodLoc);
 
   newEnemy['loc'] = loc;
+  newEnemy.delta = [0,0];
   exports.enemies.push(newEnemy);
 };
+
+exports.randomWalk = function(enemy){
+  var max = 0.08;
+  var oldDx = enemy.delta[0];
+  var oldDy = enemy.delta[1];
+
+  var newDx = oldDx + Math.random()*0.01 - 0.005;
+  newDx = Math.max(newDx, -1*max);
+  newDx = Math.min(newDx, max);
+
+  var newDy = oldDy + Math.random()*0.01 - 0.005;
+  newDy = Math.max(newDy, -1*max);
+  newDy = Math.min(newDy, max);
+
+  enemy.delta = [newDx,newDy];
+  enemy.loc = [enemy.loc[0]+newDx, enemy.loc[1]+newDy];
+  if (enemy.loc[0] < 1 || enemy.loc[0] > 18){
+    enemy.loc[0] = enemy.loc[0] - 2*newDx;
+  }
+  if (enemy.loc[1] < 1 || enemy.loc[1] > 18){
+    enemy.loc[1] = enemy.loc[1] - 2*newDy;
+  }
+
+
+  for(var i = 0; i < exports.staticObjects.length; i++){
+    if (exports.checkCollisions(enemy, exports.staticObjects[i])){
+      enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
+    }
+  }
+
+  if (Math.random() < 0.01) {
+    console.log(enemy.loc[0] +' '+enemy.loc[1]);
+  }
+}
 
 exports.addStaticObject = function() {
   var newStaticObject = {};
@@ -115,9 +140,9 @@ exports.checkCollisions = function(enemy, staticObject){
   // check for box collision between player coords
   //   and staticObject coords
   var collided = false;
-  if(enemy.loc[0] > staticObject.loc[0] + 1 ||
-     enemy.loc[1] > staticObject.loc[1] + 1 ||
-     staticObject.loc[0] > enemy.loc[0] + 1 ||
+  if(enemy.loc[0] > staticObject.loc[0] + 1 &&
+     enemy.loc[1] > staticObject.loc[1] + 1 &&
+     staticObject.loc[0] > enemy.loc[0] + 1 &&
      staticObject.loc[1] > enemy.loc[1] + 1 ) {
 
     collided = true;
@@ -126,11 +151,11 @@ exports.checkCollisions = function(enemy, staticObject){
 };
 
 exports.vectorTransform = function(shot) {
-  var x = shot[0];
-  var y = shot[1];
-  var dx = shot[2];
-  var dy = shot[3];
-  var t = shot[4];
+  var x = shot.loc[0];
+  var y = shot.loc[1];
+  var dx = shot.delta[0];
+  var dy = shot.delta[1];
+  var t = shot.time;
   var time = Date.now() % 1000000;
   var dt = time - t;
   var result = [
@@ -144,6 +169,16 @@ exports.vectorTransform = function(shot) {
 exports.tickTime = function(){
   //move enemies around and check for collisions
   // main server refresh loop
+  for (var i = 0; i < exports.enemies.length; i++){
+    exports.randomWalk(exports.enemies[i]);
+    if (Math.random() < 0.001){
+      //make an enemy shot
+      var newShot = {};
+      newShot.loc = exports.enemies[i].loc;
+      newShot.delta = [exports.enemies[i].delta[0]*3,exports.enemies[i].delta[1]*3];
+      newShot.time = Date.now()%1000000;
+    }
+  }
 
   // loop through the players
   //  send data to player through their connections
@@ -155,13 +190,9 @@ exports.tickTime = function(){
       exports.players.splice(i,1);
     }
   }
+
 };
 
-exports.build = {
-  staticObjects: exports.staticObjects,
-  borderX: options.maxX,
-  borderY: options.maxY
-}
 
 exports.sendGameStateToPlayer = function(connection) {
 
@@ -173,7 +204,7 @@ exports.sendGameStateToPlayer = function(connection) {
   var data = {};
 
   for(var i = 0; i < exports.players; i++) {
-    playerData.push([exports.players[i].id , exports.players[i].loc]);
+    playerData.push([exports.players[i].pid , exports.players[i].loc]);
   }
   for(var j = 0; j < exports.enemies; j++) {
     enemyData.push(exports.enemies[j].loc);
@@ -186,12 +217,38 @@ exports.sendGameStateToPlayer = function(connection) {
   }
 
   data.players = playerData;
-  data.enemies = enemyData;
   data.playerShots = playerShots;
   data.enemyShots = enemyShots;
+  data.enemies = enemyData;
 
   connection.send(JSON.stringify(data));
 };
+
+exports.build = {
+  enemies: exports.enemies,
+  staticObjects: exports.staticObjects,
+  borderX: options.maxX,
+  borderY: options.maxY,
+}
+
+exports.addPosAndIdToBuild = function(){
+  var loc = [Math.random()*(options.maxX - 3) + 1.5,
+             Math.random()*(options.maxY - 3) + 1.5]
+   do{
+    var goodLoc = true;
+    for (var i = 0; i < exports.enemies.length; i++){
+      if (distance(loc, exports.enemies[i].loc) < 1.5) {
+        goodLoc = false;
+      }
+    }
+    loc = [Math.random()*(options.maxX - 3) + 1.5,
+           Math.random()*(options.maxY - 3) + 1.5]
+  } while (!goodLoc);
+  exports.build.playerStartX = loc[0];
+  exports.build.playerStartY = loc[1];
+
+  exports.build.pid = ++playerIdIncrementer;
+}
 
 /* ----------------  handle data from websockets -------------------- */
 
