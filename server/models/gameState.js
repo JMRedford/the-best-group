@@ -130,7 +130,7 @@ exports.vectorTransform = function(shot) {
   var dx = shot[2];
   var dy = shot[3];
   var t = shot[4];
-  var time = Date.now();
+  var time = Date.now() % 1000000;
   var dt = time - t;
   var result = [
     x + (dt * dx) * exports.options.shotSpeed,

@@ -15,11 +15,12 @@ GET / HTTP/1.1
 function startWebSocket() {
   window.ws = new WebSocket('ws://127.0.0.1:3000');
   ws.onopen = function(e) {
-    setInterval(sendUpdates, 30)
+    setInterval(sendUpdates, 100)
     ws.onmessage = function(e) {
       updateBoard(e);
     }
   }
+}
 
 function initBoard(data) {
   Game.start(data)
