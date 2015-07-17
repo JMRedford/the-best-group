@@ -6,17 +6,17 @@ exports.players = [];
 
 exports.enemies = [];
 
-exports.staticObjects = [];  
+exports.staticObjects = [];
 // trees, rocks, etc initialized with loc coords
 // format: [{'loc':[x,y]},...]
 
 exports.playerShots = [];
-//format of playerAttack: {vector: [origin x, origin y, 
+//format of playerAttack: {vector: [origin x, origin y,
 //        or enemyAttack:  normalized x, normalized y],
 //                         time : timestamp (milisecs?)}
 exports.enemyShots = [];
 
-// build out an options that sets 
+// build out an options that sets
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
 
 var options = {
@@ -50,14 +50,15 @@ exports.message = function(target_id, target_loc){
     if(exports.players[i]['id'] === target_id) {
       exports.players[i]['loc'] === target_loc;
     }
-  }  
+  }
 };
 
-exports.addPlayer = function(){
+exports.addPlayer = function(ws){
   var newPlayer = {};
+  newPlayer.conn = ws;
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
              Math.random()*(options.maxY - 3) + 1.5]
-   do{ 
+   do{
     var goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
       if (distance(loc, exports.enemies[i].loc) < 1.5) {
@@ -76,7 +77,7 @@ exports.addEnemy = function(){
   var newEnemy = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
              Math.random()*(options.maxY - 3) + 1.5]
-   do{ 
+   do{
     var goodLoc = true;
     for (var i = 0; i < exports.players.length; i++){
       if (distance(loc, exports.players[i].loc) < 1.5) {
@@ -95,7 +96,7 @@ exports.addStaticObject = function() {
   var newStaticObject = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
              Math.random()*(options.maxY - 3) + 1.5]
-  do{ 
+  do{
     var goodLoc = true;
     for (var i = 0; i < exports.staticObjects.length; i++){
       if (distance(loc, exports.staticObjects[i].loc) < 1.5) {
@@ -146,7 +147,14 @@ exports.tickTime = function(){
 
   // loop through the players
   //  send data to player through their connections
-
+  for (var i = exports.players.length - 1; i >= 0; i--){
+    try{
+      exports.sendGameStateToPlayer(player.conn);
+    } catch (err){
+      //remove player from array
+      exports.players.splice(i,1);
+    }
+  }
 };
 
 exports.build = {
@@ -171,7 +179,7 @@ exports.sendGameStateToPlayer = function(connection) {
     enemyData.push(exports.enemies[j].loc);
   }
   for(var k = 0; k < exports.enemyShots; k++) {
-    enemyShots.push(exports.vectorTransform(exports.enemyShots[k]));    
+    enemyShots.push(exports.vectorTransform(exports.enemyShots[k]));
   }
   for(var l = 0; l < exports.enemies; l++) {
     playerShots.push(exports.vectorTransform(exports.playerShots[l]));
@@ -189,7 +197,7 @@ exports.sendGameStateToPlayer = function(connection) {
 
 exports.handleUpdate = function(update) {
   var data = JSON.parse(update);
-  
+
   // add a player id that is incremented on creation
 
   // handle movement and shot
