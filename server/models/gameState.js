@@ -105,11 +105,13 @@ exports.randomWalk = function(enemy){
     enemy.loc[1] = enemy.loc[1] - 2*newDy;
   }
 
-  // for(var i = 0; i < exports.staticObjects.length; i++){
-  //   if (exports.checkCollisions(enemy, exports.staticObjects[i])){
-  //     enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
-  //   }
-  // }
+
+  for(var i = 0; i < exports.staticObjects.length; i++){
+    if (exports.checkCollisions(enemy, exports.staticObjects[i])){
+      enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
+    }
+  }
+
   if (Math.random() < 0.01) {
     console.log(enemy.loc[0] +' '+enemy.loc[1]);
   }
@@ -138,9 +140,9 @@ exports.checkCollisions = function(enemy, staticObject){
   // check for box collision between player coords
   //   and staticObject coords
   var collided = false;
-  if(enemy.loc[0] > staticObject.loc[0] + 1 ||
-     enemy.loc[1] > staticObject.loc[1] + 1 ||
-     staticObject.loc[0] > enemy.loc[0] + 1 ||
+  if(enemy.loc[0] > staticObject.loc[0] + 1 &&
+     enemy.loc[1] > staticObject.loc[1] + 1 &&
+     staticObject.loc[0] > enemy.loc[0] + 1 &&
      staticObject.loc[1] > enemy.loc[1] + 1 ) {
 
     collided = true;
