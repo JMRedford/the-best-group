@@ -87,7 +87,7 @@ Crafty.c('Fireball', {
   },
 
   destroyOnSolids: function(){
-    this.onHit('Solid', this.destroy());
+    this.onHit('Solid', this.destroy);
   }
 
 });

@@ -9,7 +9,7 @@ var app = express();
 var expressWs = require('express-ws')(app);
 app.use(express.static(__dirname + '/../client'));
 
-var playerKey = 0;
+
 //set up an options object that will contain
 // enemy amts and static object amts
 gameState.init();
@@ -26,13 +26,11 @@ app.get('/start', function(req, res) {
 
 /* Route to handle websocket request */
 app.ws('/', function(ws, req) {
+  gameState.addPlayer(ws);
   ws.on('message', function(msg) {
     var data = JSON.parse(msg)
     gameState.message(data.loc)
   });
-  setInterval(function(){
-    gameState.sendGameStateToPlayer(ws);
-  }, 30)
 });
 
 app.listen(process.env.PORT || 3000);

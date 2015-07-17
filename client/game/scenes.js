@@ -73,10 +73,12 @@ Crafty.scene('Game', function() {
   window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(5,5);
   player.direction = 'down';
 
+
   player.bind("KeyDown", function(e) {
     switch (e.key){
       case Crafty.keys.SPACE:
-        var fireball = Crafty.e('Fireball, SpriteAnimation, FBdown1').at(player.at().x,player.at().y);
+        var fireball = Crafty.e('Fireball, SpriteAnimation, FBdown1')
+            .at(player.at().x,player.at().y);
         switch(player.direction){
           case 'up':
             fireball.animate('flyUp',-1);
