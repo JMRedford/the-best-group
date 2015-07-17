@@ -16,6 +16,11 @@ exports.playerShots = [];
 //                         time : timestamp (milisecs?)}
 exports.enemyShots = [];
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> unknown
 // build out an options that sets
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
 
@@ -40,6 +45,7 @@ exports.init = function(){
   for(var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
+
 };
 
 // implement exports.blockSize
@@ -160,7 +166,9 @@ exports.tickTime = function(){
 exports.build = {
   staticObjects: exports.staticObjects,
   borderX: options.maxX,
-  borderY: options.maxY
+  borderY: options.maxY,
+  playerStartX:
+  playerStartY:
 }
 
 exports.sendGameStateToPlayer = function(connection) {
