@@ -21,6 +21,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/start', function(req, res) {
+  gameState.addPosAndIdToBuild();
   res.json(gameState.build);
 });
 
@@ -29,7 +30,7 @@ app.ws('/', function(ws, req) {
   gameState.addPlayer(ws);
   ws.on('message', function(msg) {
     var data = JSON.parse(msg)
-    gameState.message(data.loc)
+    gameState.handleMessage(data.loc)
   });
 });
 
