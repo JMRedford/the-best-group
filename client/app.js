@@ -41,7 +41,6 @@ function sendUpdates() {
 
 function updateBoard(msg) {
   var data = JSON.parse(msg.data);
-  console.log(data);
   window.enemies.clearEnemies();
   window.fireballs.clearFireballs();
 

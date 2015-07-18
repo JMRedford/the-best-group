@@ -12,6 +12,9 @@ window.fireballs = {
     .at(fbLoc[0],fbLoc[1])
   },
   clearFireballs: function(){
+    Crafty("Fireball").each(function(i){
+      this.destroy();
+    });
     for (var key in this.storage) {
       this.storage[key].destroy();
     }
@@ -29,10 +32,13 @@ window.enemies = {
     .at(enemy[0],enemy[1])
   },
   clearEnemies: function() {
-    for (var key in this.storage) {
-      this.storage[key].destroy();
-    }
-    this.storage = {}
+    Crafty("Enemy").each(function(i){
+      this.destroy();
+    });
+    // for (var key in this.storage) {
+    //   this.storage[key].destroy();
+    // }
+    // this.storage = {}
   },
   storage: {}
 };
