@@ -19,7 +19,6 @@ function startWebSocket() {
     console.log('socket open')
     setInterval(sendUpdates, 100)
     ws.onmessage = function(e) {
-      console.log('message!')
       updateBoard(e);
     }
   }
@@ -42,10 +41,19 @@ function sendUpdates() {
 
 function updateBoard(msg) {
   var data = JSON.parse(msg.data);
+  console.log(data);
   window.enemies.clearEnemies();
+  window.fireballs.clearFireballs();
 
   for (var en = 0; en < data.enemies.length; en++) {
     window.enemies.addEnemy(data.enemies[en]);
   }
+  for (var p = 0; p < data.playerShots.length; p++) {
+    window.fireballs.addFireball(data.playerShots[p]);
+  }
+  for (var e = 0; e < data.enemyShots.length; e++) {
+    window.fireballs.addFireball(data.enemyShots[e]);
+  }
+
 }
 
