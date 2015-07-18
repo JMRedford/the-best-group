@@ -170,11 +170,11 @@ exports.tickTime = function(){
   // main server refresh loop
   for (var i = 0; i < exports.enemies.length; i++){
     exports.randomWalk(exports.enemies[i]);
-    if (Math.random() < 0.1){
+    if (Math.random() < 0.02){
       //make an enemy shot
       var newShot = {};
       newShot.loc = exports.enemies[i].loc;
-      newShot.delta = [exports.enemies[i].delta[0]*3,exports.enemies[i].delta[1]*3];
+      newShot.delta = [exports.enemies[i].delta[0]/10,exports.enemies[i].delta[1]/10];
       newShot.time = Date.now()%1000000;
       exports.enemyShots.push(newShot);
     }
