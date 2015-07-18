@@ -10,9 +10,11 @@ window.fireballs = {
   addFireball: function (craftyObj, ID) {
     this.storage[ID] = craftyObj;
   },
-  removeFireball: function (ID){
-    this.storage[ID].destroy();
-    delete this.storage[ID];
+  clearFireballs: function(){
+    for (var key in this.storage) {
+      this.storage[key].destroy();
+    }
+    this.storage = {};
   },
 
   storage: {}
