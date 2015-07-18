@@ -19,8 +19,18 @@ window.fireballs = {
 };
 
 window.enemies = {
-  addEnemy: function(enemy){},
-  removeEnemy: function(){},
+  enemiesNum : 0,
+
+  addEnemy: function(enemy){
+    this.storage[this.enemiesNum++] = Crafty.e('Enemy')
+    .at(enemy[0],enemy[1])
+  },
+  clearEnemies: function() {
+    for (var key in this.storage) {
+      this.storage[key].destroy();
+    }
+    this.storage = {}
+  },
   storage: {}
 };
 
