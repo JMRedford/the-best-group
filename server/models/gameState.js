@@ -229,7 +229,6 @@ exports.sendGameStateToPlayer = function(connection) {
   data.players = playerData;
   data.playerShotsData = playerShotsData;
   data.enemyShotsData = enemyShotsData;
-  console.log(data.enemyShotsData[0])
   data.enemies = enemyData;
 
   connection.send(JSON.stringify(data));

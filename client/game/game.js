@@ -7,8 +7,9 @@ window.fireballs = {
     }
     return this.fbID;
   },
-  addFireball: function (craftyObj, ID) {
-    this.storage[ID] = craftyObj;
+  addFireball: function (fbLoc) {
+     this.storage[this.getID] = Crafty.e('Fireball')
+    .at(fbLoc[0],fbLoc[1])
   },
   clearFireballs: function(){
     for (var key in this.storage) {

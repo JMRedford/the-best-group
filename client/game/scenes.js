@@ -69,26 +69,23 @@ Crafty.scene('Game', function() {
   player.bind("KeyDown", function(e) {
     switch (e.key){
       case Crafty.keys.SPACE:
-        var fireball = Crafty.e('Fireball, SpriteAnimation, FBdown1')
-            .at(player.at().x,player.at().y);
         var ID = userID + fireballs.getID();
-        fireballs.addFireball(fireball, ID);
         newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: player.direction});
 
-        switch(player.direction){
-          case 'up':
-            fireball.animate('flyUp',-1);
-            break;
-          case 'down':
-            fireball.animate('flyDown',-1);
-            break;
-          case 'right':
-            fireball.animate('flyRight',-1);
-            break;
-          case 'left':
-            fireball.animate('flyLeft',-1);
-            break;
-        }
+        // switch(player.direction){
+        //   case 'up':
+        //     fireball.animate('flyUp',-1);
+        //     break;
+        //   case 'down':
+        //     fireball.animate('flyDown',-1);
+        //     break;
+        //   case 'right':
+        //     fireball.animate('flyRight',-1);
+        //     break;
+        //   case 'left':
+        //     fireball.animate('flyLeft',-1);
+        //     break;
+        // }
         break;
       case Crafty.keys.UP_ARROW || Crafty.keys.W:
         this.animate('walkUp',-1);

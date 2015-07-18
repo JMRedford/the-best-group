@@ -48,11 +48,11 @@ function updateBoard(msg) {
   for (var en = 0; en < data.enemies.length; en++) {
     window.enemies.addEnemy(data.enemies[en]);
   }
-  for (var p = 0; p < data.playerShots.length; p++) {
-    window.fireballs.addFireball(data.playerShots[p]);
+  for (var p = 0; p < data.playerShotsData.length; p++) {
+    window.fireballs.addFireball(data.playerShotsData[p]);
   }
-  for (var e = 0; e < data.enemyShots.length; e++) {
-    window.fireballs.addFireball(data.enemyShots[e]);
+  for (var e = 0; e < data.enemyShotsData.length; e++) {
+    window.fireballs.addFireball(data.enemyShotsData[e]);
   }
 
 }
