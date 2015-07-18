@@ -42,5 +42,10 @@ function sendUpdates() {
 
 function updateBoard(msg) {
   var data = JSON.parse(msg.data);
+  window.enemies.clearEnemies();
+
+  for (var en = 0; en < data.enemies.length; en++) {
+    window.enemies.addEnemy(data.enemies[en]);
+  }
 }
 
