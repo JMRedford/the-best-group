@@ -26,7 +26,6 @@ var options = {
   staticObjAmt: 6,
   maxX: 20,
   maxY: 20,
-  shotSpeed: 0.001 // this is (grid squares / milliseconds)
 };
 
 
@@ -88,11 +87,11 @@ exports.randomWalk = function(enemy){
   var oldDx = enemy.delta[0];
   var oldDy = enemy.delta[1];
 
-  var newDx = oldDx + Math.random()*0.01 - 0.005;
+  var newDx = oldDx + Math.random()*0.02 - 0.01;
   newDx = Math.max(newDx, -1*max);
   newDx = Math.min(newDx, max);
 
-  var newDy = oldDy + Math.random()*0.01 - 0.005;
+  var newDy = oldDy + Math.random()*0.02 - 0.01;
   newDy = Math.max(newDy, -1*max);
   newDy = Math.min(newDy, max);
 
@@ -100,15 +99,18 @@ exports.randomWalk = function(enemy){
   enemy.loc = [enemy.loc[0]+newDx, enemy.loc[1]+newDy];
   if (enemy.loc[0] < 1 || enemy.loc[0] > 18){
     enemy.loc[0] = enemy.loc[0] - 2*newDx;
+    enemy.delta[0] = -2 * newDx;
   }
   if (enemy.loc[1] < 1 || enemy.loc[1] > 18){
     enemy.loc[1] = enemy.loc[1] - 2*newDy;
+    enemy.delta[1] = -2 * newDy;
   }
 
 
   for(var i = 0; i < exports.staticObjects.length; i++){
     if (exports.checkCollisions(enemy, exports.staticObjects[i])){
       enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
+      enemy.delta = [-2*newDx,-2*newDy]
     }
   }
 
@@ -137,10 +139,10 @@ exports.checkCollisions = function(enemy, staticObject){
   // check for box collision between player coords
   //   and staticObject coords
   var collided = false;
-  if(enemy.loc[0] > staticObject.loc[0] + 1 &&
-     enemy.loc[1] > staticObject.loc[1] + 1 &&
-     staticObject.loc[0] > enemy.loc[0] + 1 &&
-     staticObject.loc[1] > enemy.loc[1] + 1 ) {
+  if(enemy.loc[0] < staticObject.loc[0] + 1 &&
+     enemy.loc[1] < staticObject.loc[1] + 1 &&
+     staticObject.loc[0] < enemy.loc[0] + 1 &&
+     staticObject.loc[1] < enemy.loc[1] + 1 ) {
 
     collided = true;
   }
@@ -156,8 +158,8 @@ exports.vectorTransform = function(shot) {
   var time = Date.now() % 1000000;
   var dt = time - t;
   var result = [
-    x + (dt * dx) * exports.options.shotSpeed,
-    y + (dt * dy) * exports.options.shotSpeed
+    x + (dt * dx),
+    y + (dt * dy)
   ]
   return result;
 
@@ -168,24 +170,26 @@ exports.tickTime = function(){
   // main server refresh loop
   for (var i = 0; i < exports.enemies.length; i++){
     exports.randomWalk(exports.enemies[i]);
-    if (Math.random() < 0.001){
+    if (Math.random() < 0.1){
       //make an enemy shot
       var newShot = {};
       newShot.loc = exports.enemies[i].loc;
       newShot.delta = [exports.enemies[i].delta[0]*3,exports.enemies[i].delta[1]*3];
       newShot.time = Date.now()%1000000;
+      exports.enemyShots.push(newShot);
     }
   }
 
   // loop through the players
   //  send data to player through their connections
   for (var i = exports.players.length - 1; i >= 0; i--){
-    exports.sendGameStateToPlayer(exports.players[i].conn);
-    // try{
-    // } catch (err){
-    //   //remove player from array
-    //   exports.players.splice(i,1);
-    // }
+
+    try{
+      exports.sendGameStateToPlayer(exports.players[i].conn);
+    } catch (err){
+      //remove player from array
+      exports.players.splice(i,1);
+    }
   }
 
 };
@@ -195,8 +199,8 @@ exports.sendGameStateToPlayer = function(connection) {
 
   var playerData = [];
   var enemyData = [];
-  var playerShots = [];
-  var enemyShots = [];
+  var playerShotsData = [];
+  var enemyShotsData = [];
 
   var data = {};
 
@@ -206,16 +210,26 @@ exports.sendGameStateToPlayer = function(connection) {
   for(var j = 0; j < exports.enemies.length; j++) {
     enemyData.push(exports.enemies[j].loc);
   }
+  var toRemove = [];
   for(var k = 0; k < exports.enemyShots.length; k++) {
-    enemyShots.push(exports.vectorTransform(exports.enemyShots[k]));
+    var shotLoc = exports.vectorTransform(exports.enemyShots[k]);
+    if (shotLoc[0] > 18 || shotLoc[1] > 18 || shotLoc[0] < 1 || shotLoc[1] < 1){
+      toRemove.push(k);
+    } else {
+      enemyShotsData.push(shotLoc);
+    }
+  }
+  for (var i = toRemove.length - 1; i >= 0; i--){
+    exports.enemyShots.splice(k,1);
   }
   for(var l = 0; l < exports.playerShots.length; l++) {
-    playerShots.push(exports.vectorTransform(exports.playerShots[l]));
+    playerShotsData.push(exports.vectorTransform(exports.playerShots[l]));
   }
 
   data.players = playerData;
-  data.playerShots = playerShots;
-  data.enemyShots = enemyShots;
+  data.playerShotsData = playerShotsData;
+  data.enemyShotsData = enemyShotsData;
+  console.log(data.enemyShotsData[0])
   data.enemies = enemyData;
 
   connection.send(JSON.stringify(data));
