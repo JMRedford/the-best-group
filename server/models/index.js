@@ -19,7 +19,7 @@ module.exports = {
         } else {
           console.log('Insert successful');
         }
-      })
+      });
     }
   }
-}
+};

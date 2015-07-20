@@ -14,18 +14,18 @@ GET / HTTP/1.1
 
 function startWebSocket() {
   window.ws = new WebSocket('ws://127.0.0.1:3000');
-  console.log('sent request')
+  console.log('sent request');
   ws.onopen = function(e) {
-    console.log('socket open')
-    setInterval(sendUpdates, 100)
+    console.log('socket open');
+    setInterval(sendUpdates, 100);
     ws.onmessage = function(e) {
       updateBoard(e);
-    }
-  }
+    };
+  };
 }
 
 function initBoard(data) {
-  Game.start(data)
+  Game.start(data);
   startWebSocket();
 }
 
@@ -34,7 +34,7 @@ function sendUpdates() {
       loc: [window.player.at().x, window.player.at().y],
       time: Date.now(),
       nfb : newFireballs
-  }
+  };
   window.ws.send(JSON.stringify(data));
   newFireballs = [];
 }

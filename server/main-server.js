@@ -18,7 +18,7 @@ setInterval(gameState.tickTime, 30);
 
 app.get('/', function(req, res) {
   res.render('index.html');
-})
+});
 
 app.get('/start', function(req, res) {
   gameState.addPosAndIdToBuild();
@@ -29,10 +29,10 @@ app.get('/start', function(req, res) {
 app.ws('/', function(ws, req) {
   gameState.addPlayer(ws);
   ws.on('message', function(msg) {
-    var data = JSON.parse(msg)
-    gameState.handleMessage(data.loc)
+    var data = JSON.parse(msg);
+    gameState.handleMessage(data.loc);
   });
 });
 
 app.listen(process.env.PORT || 3000);
-console.log('Server listening on 3000')
+console.log('Server listening on 3000');

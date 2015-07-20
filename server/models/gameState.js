@@ -65,7 +65,7 @@ exports.addPlayer = function(ws){
 exports.addEnemy = function(){
   var newEnemy = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
+             Math.random()*(options.maxY - 3) + 1.5];
    do{
     var goodLoc = true;
     for (var i = 0; i < exports.players.length; i++){
@@ -74,10 +74,10 @@ exports.addEnemy = function(){
       }
     }
     loc = [Math.random()*(options.maxX - 3) + 1,
-           Math.random()*(options.maxY - 3) + 1]
+           Math.random()*(options.maxY - 3) + 1];
   } while (!goodLoc);
 
-  newEnemy['loc'] = loc;
+  newEnemy.loc = loc;
   newEnemy.delta = [0,0];
   exports.enemies.push(newEnemy);
 };
@@ -110,16 +110,16 @@ exports.randomWalk = function(enemy){
   for(var i = 0; i < exports.staticObjects.length; i++){
     if (exports.checkCollisions(enemy, exports.staticObjects[i])){
       enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
-      enemy.delta = [-2*newDx,-2*newDy]
+      enemy.delta = [-2*newDx,-2*newDy];
     }
   }
 
-}
+};
 
 exports.addStaticObject = function() {
   var newStaticObject = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
+             Math.random()*(options.maxY - 3) + 1.5];
   do{
     var goodLoc = true;
     for (var i = 0; i < exports.staticObjects.length; i++){
@@ -128,12 +128,12 @@ exports.addStaticObject = function() {
       }
     }
     loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
+           Math.random()*(options.maxY - 3) + 1.5];
   } while (!goodLoc);
 
-  newStaticObject['loc'] = loc;
+  newStaticObject.loc = loc;
   exports.staticObjects.push(newStaticObject);
-}
+};
 
 exports.checkCollisions = function(a, b){
   // check for box collision between player coords
@@ -153,10 +153,10 @@ exports.vectorTransform = function(shot) {
   var result = [
     x + (dt * dx),
     y + (dt * dy)
-  ]
+  ];
   return result;
 
-}
+};
 
 exports.tickTime = function(){
   //move enemies around and check for collisions
@@ -232,11 +232,11 @@ exports.build = {
   staticObjects: exports.staticObjects,
   borderX: options.maxX,
   borderY: options.maxY,
-}
+};
 
 exports.addPosAndIdToBuild = function(){
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
+             Math.random()*(options.maxY - 3) + 1.5];
    do{
     var goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
@@ -245,13 +245,13 @@ exports.addPosAndIdToBuild = function(){
       }
     }
     loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
+           Math.random()*(options.maxY - 3) + 1.5];
   } while (!goodLoc);
   exports.build.playerStartX = loc[0];
   exports.build.playerStartY = loc[1];
 
   exports.build.pId = ++playerIdIncrementer;
-}
+};
 
 /* ----------------  handle data from websockets -------------------- */
 
@@ -261,7 +261,7 @@ exports.handleUpdate = function(update) {
   // add a player id that is incremented on creation
 
   // handle movement and shot
-}
+};
 
 
 

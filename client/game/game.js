@@ -1,7 +1,7 @@
 window.fireballs = {
   fbID: 0,
   getID: function() {
-    this.fbID++
+    this.fbID++;
     if (this.fbID>99) {
       this.fbID=0;
     }
@@ -9,7 +9,7 @@ window.fireballs = {
   },
   addFireball: function (fbLoc) {
      this.storage[this.getID] = Crafty.e('Fireball')
-    .at(fbLoc[0],fbLoc[1])
+    .at(fbLoc[0],fbLoc[1]);
   },
   clearFireballs: function(){
     Crafty("Fireball").each(function(i){
@@ -29,7 +29,7 @@ window.enemies = {
 
   addEnemy: function(enemy){
     this.storage[this.enemiesNum++] = Crafty.e('Enemy')
-    .at(enemy[0],enemy[1])
+    .at(enemy[0],enemy[1]);
   },
   clearEnemies: function() {
     Crafty("Enemy").each(function(i){
@@ -90,4 +90,4 @@ Game = {
 
     Crafty.scene('Loading');
   }
-}
+};
