@@ -1,0 +1,31 @@
+Initial data from Server to Client: (sent before websocket connection via a get request to /start)
+
+{
+  //N.B. 'x' and 'y' are horizontal and vertical
+    positions from the top left corner measured
+    in a non-integer number of tiles
+  enemies: [{loc:[x,y], delta:[dx,dy]},...]
+  staticObjects: [{loc: [x,y]},...]
+  borderX: integer (width of board in tiles)
+  borderY: integer (height of board in tiles)
+  playerStartX: float
+  playerStartY: float
+  pId: integer
+}
+
+Ongoing data from Server to Client:
+
+{
+  playerData: [[pId,[x,y]],...]
+  enemyData: [[x,y],..]
+  playerShotsData: [[x,y],...]
+  enemyShotsData: [[x,y],...]
+}
+
+Data from Client to the Server:
+
+{
+  loc: [x,y]
+  time: Date.now()
+  nfb : ???
+}

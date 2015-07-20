@@ -2,7 +2,7 @@ var exports = module.exports = {};
 
 //server side game state storage here
 exports.players = [];
-//player: {'pid':#, 'conn':conn, 'loc':[#,#]}
+//player: {'pId':#, 'conn':conn, 'loc':[#,#]}
 
 exports.enemies = [];
 //enemy: {'loc':[#,#], delta:[#,#]}
@@ -49,7 +49,7 @@ exports.init = function(){
 exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
   for(var i = 0; i < exports.players.length; i++) {
-    if(exports.players[i].pid === target_id) {
+    if(exports.players[i].pId === target_id) {
       exports.players[i].loc === target_loc;
     }
   }
@@ -58,7 +58,7 @@ exports.handleMessage = function(target_id, target_loc){
 exports.addPlayer = function(ws){
   var newPlayer = {};
   newPlayer.conn = ws;
-  newPlayer.pid = exports.build.pid;
+  newPlayer.pId = exports.build.pId;
   exports.players.push(newPlayer);
 };
 
@@ -205,7 +205,7 @@ exports.sendGameStateToPlayer = function(connection) {
   var data = {};
 
   for(var i = 0; i < exports.players.length; i++) {
-    playerData.push([exports.players[i].pid , exports.players[i].loc]);
+    playerData.push([exports.players[i].pId , exports.players[i].loc]);
   }
   for(var j = 0; j < exports.enemies.length; j++) {
     enemyData.push(exports.enemies[j].loc);
@@ -257,7 +257,7 @@ exports.addPosAndIdToBuild = function(){
   exports.build.playerStartX = loc[0];
   exports.build.playerStartY = loc[1];
 
-  exports.build.pid = ++playerIdIncrementer;
+  exports.build.pId = ++playerIdIncrementer;
 }
 
 /* ----------------  handle data from websockets -------------------- */
