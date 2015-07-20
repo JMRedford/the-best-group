@@ -66,8 +66,9 @@ exports.addEnemy = function(){
   var newEnemy = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
              Math.random()*(options.maxY - 3) + 1.5];
-   do{
-    var goodLoc = true;
+  var goodLoc = true;
+
+  do {
     for (var i = 0; i < exports.players.length; i++){
       if (distance(loc, exports.players[i].loc) < 1.5) {
         goodLoc = false;
@@ -120,8 +121,9 @@ exports.addStaticObject = function() {
   var newStaticObject = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
              Math.random()*(options.maxY - 3) + 1.5];
-  do{
-    var goodLoc = true;
+  var goodLoc = true;
+
+  do {
     for (var i = 0; i < exports.staticObjects.length; i++){
       if (distance(loc, exports.staticObjects[i].loc) < 1.5) {
         goodLoc = false;
