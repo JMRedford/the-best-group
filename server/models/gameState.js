@@ -135,18 +135,11 @@ exports.addStaticObject = function() {
   exports.staticObjects.push(newStaticObject);
 }
 
-exports.checkCollisions = function(enemy, staticObject){
+exports.checkCollisions = function(a, b){
   // check for box collision between player coords
   //   and staticObject coords
-  var collided = false;
-  if(enemy.loc[0] < staticObject.loc[0] + 1 &&
-     enemy.loc[1] < staticObject.loc[1] + 1 &&
-     staticObject.loc[0] < enemy.loc[0] + 1 &&
-     staticObject.loc[1] < enemy.loc[1] + 1 ) {
-
-    collided = true;
-  }
-  return collided;
+  return (Math.abs(a.loc[0] - b.loc[0]) < 1 && 
+     Math.abs(a.loc[1] - b.loc[1]) < 1);
 };
 
 exports.vectorTransform = function(shot) {
