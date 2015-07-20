@@ -50,7 +50,7 @@ exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
   for(var i = 0; i < exports.players.length; i++) {
     if(exports.players[i].pId === target_id) {
-      exports.players[i].loc === target_loc;
+      exports.players[i].loc = target_loc;
     }
   }
 };
