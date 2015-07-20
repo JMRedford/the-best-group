@@ -35,10 +35,10 @@ var distance = function(loc1,loc2){
 
 exports.init = function(){
   // create enemies
-  for(var i = 0; i < options.enemyAmt; i++) {
+  for (var i = 0; i < options.enemyAmt; i++) {
     exports.addEnemy();
   }
-  for(var j = 0; j < options.staticObjAmt; j++) {
+  for (var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
 
@@ -48,9 +48,9 @@ exports.init = function(){
 
 exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
-  for(var i = 0; i < exports.players.length; i++) {
+  for (var i = 0; i < exports.players.length; i++) {
     if(exports.players[i].pId === target_id) {
-      exports.players[i].loc === target_loc;
+      exports.players[i].loc = target_loc;
     }
   }
 };
@@ -65,19 +65,20 @@ exports.addPlayer = function(ws){
 exports.addEnemy = function(){
   var newEnemy = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
-   do{
-    var goodLoc = true;
+             Math.random()*(options.maxY - 3) + 1.5];
+  var goodLoc = true;
+
+  do {
     for (var i = 0; i < exports.players.length; i++){
       if (distance(loc, exports.players[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
     loc = [Math.random()*(options.maxX - 3) + 1,
-           Math.random()*(options.maxY - 3) + 1]
+           Math.random()*(options.maxY - 3) + 1];
   } while (!goodLoc);
 
-  newEnemy['loc'] = loc;
+  newEnemy.loc = loc;
   newEnemy.delta = [0,0];
   exports.enemies.push(newEnemy);
 };
@@ -107,33 +108,34 @@ exports.randomWalk = function(enemy){
   }
 
 
-  for(var i = 0; i < exports.staticObjects.length; i++){
+  for (var i = 0; i < exports.staticObjects.length; i++){
     if (exports.checkCollisions(enemy, exports.staticObjects[i])){
       enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
-      enemy.delta = [-2*newDx,-2*newDy]
+      enemy.delta = [-2*newDx,-2*newDy];
     }
   }
 
-}
+};
 
 exports.addStaticObject = function() {
   var newStaticObject = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
-  do{
-    var goodLoc = true;
+             Math.random()*(options.maxY - 3) + 1.5];
+  var goodLoc = true;
+
+  do {
     for (var i = 0; i < exports.staticObjects.length; i++){
       if (distance(loc, exports.staticObjects[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
     loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
+           Math.random()*(options.maxY - 3) + 1.5];
   } while (!goodLoc);
 
-  newStaticObject['loc'] = loc;
+  newStaticObject.loc = loc;
   exports.staticObjects.push(newStaticObject);
-}
+};
 
 exports.checkCollisions = function(a, b){
   // check for box collision between player coords
@@ -153,10 +155,10 @@ exports.vectorTransform = function(shot) {
   var result = [
     x + (dt * dx),
     y + (dt * dy)
-  ]
+  ];
   return result;
 
-}
+};
 
 exports.tickTime = function(){
   //move enemies around and check for collisions
@@ -175,13 +177,13 @@ exports.tickTime = function(){
 
   // loop through the players
   //  send data to player through their connections
-  for (var i = exports.players.length - 1; i >= 0; i--){
+  for (var j = exports.players.length - 1; j >= 0; j--){
 
-    try{
-      exports.sendGameStateToPlayer(exports.players[i].conn);
+    try {
+      exports.sendGameStateToPlayer(exports.players[j].conn);
     } catch (err){
       //remove player from array
-      exports.players.splice(i,1);
+      exports.players.splice(j,1);
     }
   }
 
@@ -197,14 +199,14 @@ exports.sendGameStateToPlayer = function(connection) {
 
   var data = {};
 
-  for(var i = 0; i < exports.players.length; i++) {
+  for (var i = 0; i < exports.players.length; i++) {
     playerData.push([exports.players[i].pId , exports.players[i].loc]);
   }
-  for(var j = 0; j < exports.enemies.length; j++) {
+  for (var j = 0; j < exports.enemies.length; j++) {
     enemyData.push(exports.enemies[j].loc);
   }
   var toRemove = [];
-  for(var k = 0; k < exports.enemyShots.length; k++) {
+  for (var k = 0; k < exports.enemyShots.length; k++) {
     var shotLoc = exports.vectorTransform(exports.enemyShots[k]);
     if (shotLoc[0] > 18 || shotLoc[1] > 18 || shotLoc[0] < 1 || shotLoc[1] < 1){
       toRemove.push(k);
@@ -212,11 +214,11 @@ exports.sendGameStateToPlayer = function(connection) {
       enemyShotsData.push(shotLoc);
     }
   }
-  for (var i = toRemove.length - 1; i >= 0; i--){
-    exports.enemyShots.splice(k,1);
+  for (var l = toRemove.length - 1; l >= 0; l--){
+    exports.enemyShots.splice(l,1);
   }
-  for(var l = 0; l < exports.playerShots.length; l++) {
-    playerShotsData.push(exports.vectorTransform(exports.playerShots[l]));
+  for (var m = 0; m < exports.playerShots.length; m++) {
+    playerShotsData.push(exports.vectorTransform(exports.playerShots[m]));
   }
 
   data.players = playerData;
@@ -232,26 +234,27 @@ exports.build = {
   staticObjects: exports.staticObjects,
   borderX: options.maxX,
   borderY: options.maxY,
-}
+};
 
 exports.addPosAndIdToBuild = function(){
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5]
-   do{
-    var goodLoc = true;
+             Math.random()*(options.maxY - 3) + 1.5];
+  var goodLoc = true;
+
+  do {
     for (var i = 0; i < exports.enemies.length; i++){
       if (distance(loc, exports.enemies[i].loc) < 1.5) {
         goodLoc = false;
       }
     }
     loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5]
+           Math.random()*(options.maxY - 3) + 1.5];
   } while (!goodLoc);
   exports.build.playerStartX = loc[0];
   exports.build.playerStartY = loc[1];
 
   exports.build.pId = ++playerIdIncrementer;
-}
+};
 
 /* ----------------  handle data from websockets -------------------- */
 
@@ -261,7 +264,7 @@ exports.handleUpdate = function(update) {
   // add a player id that is incremented on creation
 
   // handle movement and shot
-}
+};
 
 
 

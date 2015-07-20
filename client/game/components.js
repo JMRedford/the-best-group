@@ -8,13 +8,13 @@ Crafty.c('Grid', {
     this.attr({
       w: Game.map_grid.tile.width,
       h: Game.map_grid.tile.height
-    })
+    });
   },
 
   // Locate this entity at the given position on the grid
   at: function(x, y) {
     if (x === undefined && y === undefined) {
-      return { x: this.x/Game.map_grid.tile.width, y: this.y/Game.map_grid.tile.height }
+      return { x: this.x/Game.map_grid.tile.width, y: this.y/Game.map_grid.tile.height };
     } else {
       this.attr({ x: Math.floor(x * Game.map_grid.tile.width), y: Math.floor(y * Game.map_grid.tile.height) });
       return this;
@@ -41,7 +41,7 @@ Crafty.c('PlayerCharacter', {
       .reel('up', 1, 0, 1, 1)
       .reel('down', 1, 0, 0, 1)
       .reel('right', 1, 0, 2, 1)
-      .reel('left', 1, 0, 3, 1)
+      .reel('left', 1, 0, 3, 1);
 
 
   },

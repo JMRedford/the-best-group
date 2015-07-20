@@ -48,7 +48,7 @@ Crafty.scene('Loading', function(){
     });
     // Now that our sprites are ready to draw, start the game
     Crafty.scene('Game');
-  })
+  });
 });
 
 
@@ -58,10 +58,10 @@ Crafty.scene('Loading', function(){
 // Runs the core gameplay loop
 Crafty.scene('Game', function() {
 
-  console.log('started game scene')
+  console.log('started game scene');
 
   // Player character, placed at 5, 5 on our grid
-  console.log('making player')
+  console.log('making player');
   window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(playerStartLoc[0], playerStartLoc[1]);
   player.direction = 'down';
 
@@ -122,18 +122,18 @@ Crafty.scene('Game', function() {
         break;
     }
 
-  })
+  });
 
 
 
   for (var rock = 0; rock < Game.rocks.length;  rock++) {
-      Crafty.e('Rock').at(Game.rocks[rock].loc[0], Game.rocks[rock].loc[1])
+      Crafty.e('Rock').at(Game.rocks[rock].loc[0], Game.rocks[rock].loc[1]);
   }
 
   // Place a tree at every edge square on our grid of 16x16 tiles
   for (var x = 0; x < Game.map_grid.width; x++) {
     for (var y = 0; y < Game.map_grid.height; y++) {
-      var at_edge = x == 0 || x == Game.map_grid.width - 1 || y == 0 || y == Game.map_grid.height - 1;
+      var at_edge = x === 0 || x == Game.map_grid.width - 1 || y === 0 || y == Game.map_grid.height - 1;
 
       if (at_edge) {
         // Place a tree entity at the current tile
