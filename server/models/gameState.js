@@ -35,10 +35,10 @@ var distance = function(loc1,loc2){
 
 exports.init = function(){
   // create enemies
-  for(var i = 0; i < options.enemyAmt; i++) {
+  for (var i = 0; i < options.enemyAmt; i++) {
     exports.addEnemy();
   }
-  for(var j = 0; j < options.staticObjAmt; j++) {
+  for (var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
 
@@ -48,7 +48,7 @@ exports.init = function(){
 
 exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
-  for(var i = 0; i < exports.players.length; i++) {
+  for (var i = 0; i < exports.players.length; i++) {
     if(exports.players[i].pId === target_id) {
       exports.players[i].loc = target_loc;
     }
@@ -108,7 +108,7 @@ exports.randomWalk = function(enemy){
   }
 
 
-  for(var i = 0; i < exports.staticObjects.length; i++){
+  for (var i = 0; i < exports.staticObjects.length; i++){
     if (exports.checkCollisions(enemy, exports.staticObjects[i])){
       enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
       enemy.delta = [-2*newDx,-2*newDy];
@@ -179,7 +179,7 @@ exports.tickTime = function(){
   //  send data to player through their connections
   for (var j = exports.players.length - 1; j >= 0; j--){
 
-    try{
+    try {
       exports.sendGameStateToPlayer(exports.players[j].conn);
     } catch (err){
       //remove player from array
