@@ -177,13 +177,13 @@ exports.tickTime = function(){
 
   // loop through the players
   //  send data to player through their connections
-  for (var i = exports.players.length - 1; i >= 0; i--){
+  for (var j = exports.players.length - 1; j >= 0; j--){
 
     try{
-      exports.sendGameStateToPlayer(exports.players[i].conn);
+      exports.sendGameStateToPlayer(exports.players[j].conn);
     } catch (err){
       //remove player from array
-      exports.players.splice(i,1);
+      exports.players.splice(j,1);
     }
   }
 
@@ -199,14 +199,14 @@ exports.sendGameStateToPlayer = function(connection) {
 
   var data = {};
 
-  for(var i = 0; i < exports.players.length; i++) {
+  for (var i = 0; i < exports.players.length; i++) {
     playerData.push([exports.players[i].pId , exports.players[i].loc]);
   }
-  for(var j = 0; j < exports.enemies.length; j++) {
+  for (var j = 0; j < exports.enemies.length; j++) {
     enemyData.push(exports.enemies[j].loc);
   }
   var toRemove = [];
-  for(var k = 0; k < exports.enemyShots.length; k++) {
+  for (var k = 0; k < exports.enemyShots.length; k++) {
     var shotLoc = exports.vectorTransform(exports.enemyShots[k]);
     if (shotLoc[0] > 18 || shotLoc[1] > 18 || shotLoc[0] < 1 || shotLoc[1] < 1){
       toRemove.push(k);
@@ -214,11 +214,11 @@ exports.sendGameStateToPlayer = function(connection) {
       enemyShotsData.push(shotLoc);
     }
   }
-  for (var i = toRemove.length - 1; i >= 0; i--){
-    exports.enemyShots.splice(k,1);
+  for (var l = toRemove.length - 1; l >= 0; l--){
+    exports.enemyShots.splice(l,1);
   }
-  for(var l = 0; l < exports.playerShots.length; l++) {
-    playerShotsData.push(exports.vectorTransform(exports.playerShots[l]));
+  for (var m = 0; m < exports.playerShots.length; m++) {
+    playerShotsData.push(exports.vectorTransform(exports.playerShots[m]));
   }
 
   data.players = playerData;
@@ -239,8 +239,9 @@ exports.build = {
 exports.addPosAndIdToBuild = function(){
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
              Math.random()*(options.maxY - 3) + 1.5];
-   do{
-    var goodLoc = true;
+  var goodLoc = true;
+
+  do {
     for (var i = 0; i < exports.enemies.length; i++){
       if (distance(loc, exports.enemies[i].loc) < 1.5) {
         goodLoc = false;
