@@ -64,16 +64,16 @@ Crafty.c('PlayerCharacter', {
 
 Crafty.c('Boundary', {
   init: function() {
-    this.requires('Actor, Color, Solid')
-    .color('rgb(20, 125, 40)');
+    this.requires('Actor, Color, Solid, Image')
+    .image('sprites/mountain.png')
   }
 });
 
 
 Crafty.c('Rock', {
   init: function() {
-    this.requires('Actor, Color, Solid')
-      .color('rgb(20, 185, 40)');
+    this.requires('Actor, Solid, Image')
+    .image("sprites/rock.png")
   }
 });
 
