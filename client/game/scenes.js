@@ -9,7 +9,7 @@ Crafty.scene('Loading', function(){
     .text('Loading...')
     .attr({ x: 0, y: Game.height()/2 - 24, w: Game.width() });
   // Load our sprite map image
-  Crafty.load({"images":['sprites/gokuSprite.png', 'sprites/FB.png']}, function(){
+  Crafty.load({"images":['sprites/gokuSprite.png', 'sprites/FB.png',"sprites/rock.png", "sprites/mountain.png"]}, function(){
     // Once the image is loaded...
 
     // Define the individual sprites in the image
