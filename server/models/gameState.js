@@ -28,7 +28,6 @@ var options = {
   maxY: 20,
 };
 
-
 var distance = function(loc1,loc2){
   return Math.pow(Math.pow(loc2[1]-loc1[1],2)+Math.pow(loc2[0]-loc1[0],2),0.5);
 };
@@ -41,10 +40,7 @@ exports.init = function(){
   for (var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
-
 };
-
-// implement exports.blockSize
 
 exports.handleMessage = function(target_id, target_loc){
   // search through exports.players array, locate object with matched id, update data
@@ -70,7 +66,17 @@ exports.addEnemy = function(){
 
   do {
     for (var i = 0; i < exports.players.length; i++){
-      if (distance(loc, exports.players[i].loc) < 1.5) {
+      if (exports.checkCollisions(exports.players[i].loc,loc)) {
+        goodLoc = false;
+      }
+    }
+    loc = [Math.random()*(options.maxX - 3) + 1,
+           Math.random()*(options.maxY - 3) + 1];
+  } while (!goodLoc);
+
+  do {
+    for (var i = 0; i < exports.staticObjects.length; i++){
+      if (exports.checkCollisions(exports.staticObjects[i].loc,loc)) {
         goodLoc = false;
       }
     }
@@ -138,8 +144,8 @@ exports.addStaticObject = function() {
 };
 
 exports.checkCollisions = function(a, b){
-  // check for box collision between player coords
-  //   and staticObject coords
+  // check for box collision between two
+  // objects with a .loc property
   return (Math.abs(a.loc[0] - b.loc[0]) < 1 && 
      Math.abs(a.loc[1] - b.loc[1]) < 1);
 };
@@ -178,7 +184,6 @@ exports.tickTime = function(){
   // loop through the players
   //  send data to player through their connections
   for (var j = exports.players.length - 1; j >= 0; j--){
-
     try {
       exports.sendGameStateToPlayer(exports.players[j].conn);
     } catch (err){
@@ -186,7 +191,6 @@ exports.tickTime = function(){
       exports.players.splice(j,1);
     }
   }
-
 };
 
 
@@ -261,50 +265,5 @@ exports.addPosAndIdToBuild = function(){
 exports.handleUpdate = function(update) {
   var data = JSON.parse(update);
 
-  // add a player id that is incremented on creation
 
-  // handle movement and shot
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -60,16 +60,14 @@ Crafty.scene('Game', function() {
 
   console.log('started game scene');
 
-  // Player character, placed at 5, 5 on our grid
   console.log('making player');
   window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(playerStartLoc[0], playerStartLoc[1]);
   player.direction = 'down';
 
-
   player.bind("KeyDown", function(e) {
     switch (e.key){
       case Crafty.keys.SPACE:
-        var ID = userID + fireballs.getID();
+        var ID = userID + ',' + fireballs.getID();
         newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: player.direction});
 
         // switch(player.direction){

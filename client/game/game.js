@@ -35,10 +35,6 @@ window.enemies = {
     Crafty("Enemy").each(function(i){
       this.destroy();
     });
-    // for (var key in this.storage) {
-    //   this.storage[key].destroy();
-    // }
-    // this.storage = {}
   },
   storage: {}
 };
@@ -74,9 +70,7 @@ Game = {
 
   // Initialize and start our game
   start: function(data) {
-    // Start crafty and set a background color so that we can see it's working
-
-
+    // Start crafty and set a background color
     // get width, height, rock positions from data
 
     this.map_grid.width  = data.borderX;
