@@ -31,6 +31,7 @@ function initBoard(data) {
 
 function sendUpdates() {
   var data = {
+      pId: window.userID,
       loc: [window.player.at().x, window.player.at().y],
       time: Date.now(),
       nfb : newFireballs
