@@ -197,7 +197,7 @@ exports.tickTime = function(){
       playerShotsToRemove.push(i);
     }
     for (var j = 0; j < exports.staticObjects.length; j++){
-      if (exports.checkCollisions(shot, exports.staticObjects)){
+      if (exports.checkCollisions(shot, exports.staticObjects[j])){
         playerShotsToRemove.push(i);
       }
     }
