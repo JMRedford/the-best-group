@@ -79,8 +79,8 @@ Crafty.c('Rock', {
 
 Crafty.c('Enemy', {
   init: function() {
-    this.requires('Actor, Color, Solid')
-      .color('rgb(20, 40, 185)');
+    this.requires('Actor, Image, Solid')
+      .image('sprites/Enemy.png');
   }
 });
 
