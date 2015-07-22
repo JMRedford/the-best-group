@@ -49,10 +49,10 @@ exports.handleMessage = function(data){
     }
   }
   for (var i = 0; i < data.nfb.length; i++) {
-    var dirs = {'up'   : [0,-0.08], 
-                'down' : [0, 0.08], 
-                'left' : [-0.08,0], 
-                'right': [0.08, 0]}
+    var dirs = {'up'   : [0,-0.008], 
+                'down' : [0, 0.008], 
+                'left' : [-0.008,0], 
+                'right': [0.008, 0]}
     var shot = data.nfb[i];
     exports.playerShots.push({'loc'   : shot.loc,
                               'delta' : dirs[shot.dir],
@@ -139,8 +139,9 @@ exports.addStaticObject = function() {
   var goodLoc = true;
 
   do {
+    goodLoc = true;
     for (var i = 0; i < exports.staticObjects.length; i++){
-      if (distance(loc, exports.staticObjects[i].loc) < 1.5) {
+      if (exports.checkCollisions({loc:loc},exports.staticObjects[i])){
         goodLoc = false;
       }
     }
@@ -172,7 +173,6 @@ exports.vectorTransform = function(shot) {
     y + (dt * dy)
   ];
   return result;
-
 };
 
 exports.tickTime = function(){
@@ -193,8 +193,16 @@ exports.tickTime = function(){
   var enemiesToRemove = [];
   for (var i = 0; i < exports.playerShots.length; i++){
     var shot = {loc: exports.vectorTransform(exports.playerShots[i])};
+    if (shot.loc[0] > 20 || shot.loc[0] < 0 || shot.loc[1] < 0 || shot.loc[1] > 20){
+      playerShotsToRemove.push(i);
+    }
+    for (var j = 0; j < exports.staticObjects.length; j++){
+      if (exports.checkCollisions(shot, exports.staticObjects)){
+        playerShotsToRemove.push(i);
+      }
+    }
     for (var j = 0; j < exports.enemies.length; j++) {
-      if (exports.checkCollisions(exports.playerShots[i], exports.enemies[j])){
+      if (exports.checkCollisions(shot, exports.enemies[j])){
         playerShotsToRemove.push(i);
         enemiesToRemove.push(j);
       }
