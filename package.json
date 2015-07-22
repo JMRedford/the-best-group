@@ -1,7 +1,7 @@
 {
   "name": "RealmOfTheMadGodClone",
   "version": "0.0.0",
-  "main": "app.js",
+  "main": "./server/main-server.js",
   "dependencies": {
     "body-parser": "^1.9.2",
     "bower": "^1.4.1",
@@ -11,4 +11,7 @@
     "nodemon": "^1.2.1",
     "pg": "^3.4.2"
   }
+  "scripts": {
+    "start": "node ./server/main-server.js",
+  },
 }
