@@ -10,7 +10,7 @@
     "node-oauth2-server": "^2.0.2",
     "nodemon": "^1.2.1",
     "pg": "^3.4.2"
-  }
+  },
   "scripts": {
     "start": "node ./server/main-server.js",
   },
