@@ -27,7 +27,7 @@ Data from Client to the Server:
 {
   pId: pId
   loc: [x,y]
-  time: Date.now()
+  time: Date.now() // dont need
   nfb : [{t: Date.now(), loc:[x,y], ID: 'pId,fireballId',
     dir: 'dir' },...] //dir in 'up' 'down' 'left' 'right'
 }
