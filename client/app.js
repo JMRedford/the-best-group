@@ -10,10 +10,10 @@ GET / HTTP/1.1
         Sec-WebSocket-Protocol: chat, superchat
         Sec-WebSocket-Version: 13
 */
-
+var host = location.origin.replace(/^http/, 'ws')
 
 function startWebSocket() {
-  window.ws = new WebSocket('ws://127.0.0.1:3000');
+  window.ws = new WebSocket(host);
   console.log('sent request');
   ws.onopen = function(e) {
     console.log('socket open');
