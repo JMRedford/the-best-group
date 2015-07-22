@@ -12,6 +12,6 @@
     "pg": "^3.4.2"
   },
   "scripts": {
-    "start": "node ./server/main-server.js",
+    "start": "node ./server/main-server.js"
   }
 }
