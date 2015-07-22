@@ -29,7 +29,7 @@ app.ws('/', function(ws, req) {
   gameState.addPlayer(ws);
   ws.on('message', function(msg) {
     var data = JSON.parse(msg);
-    gameState.handleMessage(data.loc);
+    gameState.handleMessage(data);
   });
 });
 

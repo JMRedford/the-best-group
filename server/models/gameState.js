@@ -12,9 +12,9 @@ exports.staticObjects = [];
 // format: [{'loc':[x,y]},...]
 
 exports.playerShots = [];
-//format of playerAttack: {vector: [origin x, origin y,
-//        or enemyAttack:  normalized x, normalized y],
-//                         time : timestamp (milisecs?)}
+//format of playerAttack: {loc: [origin x, origin y],
+//        or enemyAttack:  delta: [dx, dy],
+//                         time : timestamp (milisecs%1000000)}
 exports.enemyShots = [];
 
 var playerIdIncrementer = 0;
@@ -42,12 +42,21 @@ exports.init = function(){
   }
 };
 
-exports.handleMessage = function(target_id, target_loc){
-  // search through exports.players array, locate object with matched id, update data
+exports.handleMessage = function(data){
   for (var i = 0; i < exports.players.length; i++) {
-    if(exports.players[i].pId === target_id) {
-      exports.players[i].loc = target_loc;
+    if(exports.players[i].pId === data.pId) {
+      exports.players[i].loc = data.loc;
     }
+  }
+  for (var i = 0; i < data.nfb.length; i++) {
+    var dirs = {'up'   : [0,-0.08], 
+                'down' : [0, 0.08], 
+                'left' : [-0.08,0], 
+                'right': [0.08, 0]}
+    var shot = data.nfb[i];
+    exports.playerShots.push({'loc'   : shot.loc,
+                              'delta' : dirs[shot.dir],
+                              'time'  : shot.time%1000000})
   }
 };
 
@@ -180,6 +189,24 @@ exports.tickTime = function(){
       exports.enemyShots.push(newShot);
     }
   }
+  var playerShotsToRemove = [];
+  var enemiesToRemove = [];
+  for (var i = 0; i < exports.playerShots.length; i++){
+    var shot = {loc: exports.vectorTransform(exports.playerShots[i])};
+    for (var j = 0; j < exports.enemies.length; j++) {
+      if (exports.checkCollisions(exports.playerShots[i], exports.enemies[j])){
+        playerShotsToRemove.push(i);
+        enemiesToRemove.push(j);
+      }
+    }
+  }
+  enemiesToRemove.sort(function(a,b){ return a - b });
+  for (var i = enemiesToRemove.length - 1; i >= 0; i--){
+    exports.enemies.splice(enemiesToRemove[i],1);
+  }
+  for (var i = playerShotsToRemove.length - 1; i >= 0; i--){
+    exports.playerShots.splice(playerShotsToRemove[i],1);
+  }
 
   // loop through the players
   //  send data to player through their connections
@@ -258,12 +285,4 @@ exports.addPosAndIdToBuild = function(){
   exports.build.playerStartY = loc[1];
 
   exports.build.pId = ++playerIdIncrementer;
-};
-
-/* ----------------  handle data from websockets -------------------- */
-
-exports.handleUpdate = function(update) {
-  var data = JSON.parse(update);
-
-
 };
