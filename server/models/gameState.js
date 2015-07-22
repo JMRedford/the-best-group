@@ -56,7 +56,7 @@ exports.handleMessage = function(data){
     var shot = data.nfb[i];
     exports.playerShots.push({'loc'   : shot.loc,
                               'delta' : dirs[shot.dir],
-                              'time'  : shot.time%1000000})
+                              'time'  : shot.t%1000000})
   }
 };
 
