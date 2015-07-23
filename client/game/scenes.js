@@ -62,6 +62,8 @@ Crafty.scene('Game', function() {
 
   console.log('making player');
   window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(playerStartLoc[0], playerStartLoc[1]);
+  Crafty.viewport.clampToEntities = false;
+  Crafty.viewport.follow(window.player,0,0)
   player.direction = 'down';
 
   player.bind("KeyDown", function(e) {
