@@ -48,6 +48,7 @@ exports.handleMessage = function(data){
       exports.players[i].loc = data.loc;
     }
   }
+  var time = Date.now()%1000000;
   for (var i = 0; i < data.nfb.length; i++) {
     var dirs = {'up'   : [0,-0.008], 
                 'down' : [0, 0.008], 
@@ -56,7 +57,7 @@ exports.handleMessage = function(data){
     var shot = data.nfb[i];
     exports.playerShots.push({'loc'   : shot.loc,
                               'delta' : dirs[shot.dir],
-                              'time'  : shot.t%1000000})
+                              'time'  : time});
   }
 };
 
@@ -197,7 +198,7 @@ exports.tickTime = function(){
       playerShotsToRemove.push(i);
     }
     for (var j = 0; j < exports.staticObjects.length; j++){
-      if (exports.checkCollisions(shot, exports.staticObjects)){
+      if (exports.checkCollisions(shot, exports.staticObjects[j])){
         playerShotsToRemove.push(i);
       }
     }

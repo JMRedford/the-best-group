@@ -9,11 +9,15 @@
     "express-session": "^1.11.3",
     "express-ws": "^0.2.6",
     "nodemon": "^1.2.1",
+<<<<<<< HEAD
     "passport": "^0.2.2",
     "passport-github": "^0.1.7",
     "passport-local": "^1.0.0",
     "pg": "^3.4.2",
     "request": "^2.60.0"
+=======
+    "pg": "^3.4.2"
+>>>>>>> 1de30d7174eb8ceb038d33d107ce7dbc4afdec22
   },
   "scripts": {
     "start": "node ./server/main-server.js"
