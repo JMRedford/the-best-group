@@ -94,10 +94,10 @@ Crafty.scene('Game', function() {
       var ID = userID + ',' + fireballs.getID();
       var fbDir = '';
       if (this._movement.y === 0 && this._movement.x === 0) { fbDir = player.direction; } 
-      if (this._movement.y < 0) { fbDir = 'up'; }
-      if (this._movement.y > 0) { fbDir = 'down'; }
-      if (this._movement.x < 0) { fbDir = 'left'; }
-      if (this._movement.x > 0) { fbDir = 'right'; }
+      if (this._movement.y < 0) { fbDir += 'up'; }
+      if (this._movement.y > 0) { fbDir += 'down'; }
+      if (this._movement.x < 0) { fbDir += 'left'; }
+      if (this._movement.x > 0) { fbDir += 'right'; }
       newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: fbDir});
       console.log(this._movement);
     }

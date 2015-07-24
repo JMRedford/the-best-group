@@ -26,6 +26,7 @@ var options = {
   staticObjAmt: 6,
   maxX: 20,
   maxY: 20,
+  playerShotSpeed: 0.008
 };
 
 var distance = function(loc1,loc2){
@@ -50,14 +51,22 @@ exports.handleMessage = function(data){
   }
   var time = Date.now()%1000000;
   for (var i = 0; i < data.nfb.length; i++) {
-    var dirs = {'up'   : [0,-0.008], 
-                'down' : [0, 0.008], 
-                'left' : [-0.008,0], 
-                'right': [0.008, 0]}
+    var dirs = {'up'       : [0,-options.playerShotSpeed], 
+                'down'     : [0, options.playerShotSpeed], 
+                'left'     : [-options.playerShotSpeed,0], 
+                'right'    : [ options.playerShotSpeed,0],
+                'upleft'   : [-options.playerShotSpeed,-options.playerShotSpeed],
+                'upright'  : [ options.playerShotSpeed,-options.playerShotSpeed],
+                'downleft' : [-options.playerShotSpeed, options.playerShotSpeed],
+                'downright': [ options.playerShotSpeed, options.playerShotSpeed]};
     var shot = data.nfb[i];
-    exports.playerShots.push({'loc'   : shot.loc,
-                              'delta' : dirs[shot.dir],
-                              'time'  : time});
+    if (dirs[shot.dir] !== undefined) {
+      exports.playerShots.push({'loc'   : shot.loc,
+                                'delta' : dirs[shot.dir],
+                                'time'  : time});
+    } else {
+      console.log('Invalid fireball direction recieved from client: ' + data.pId);
+    }
   }
 };
 
