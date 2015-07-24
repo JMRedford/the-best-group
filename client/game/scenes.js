@@ -99,7 +99,6 @@ Crafty.scene('Game', function() {
       if (this._movement.x < 0) { fbDir += 'left'; }
       if (this._movement.x > 0) { fbDir += 'right'; }
       newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: fbDir});
-      console.log(this._movement);
     }
   });
 
