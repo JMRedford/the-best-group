@@ -80,8 +80,7 @@ Game = {
     userID = data.pid;
 
     Crafty.init(Game.width(), Game.height());
-    Crafty.background('url(sprites/landscape.png) center center' );
-
+    //Crafty.background('url(sprites/landscape.png) fixed' );
     Crafty.scene('Loading');
   }
 };
