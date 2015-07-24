@@ -44,8 +44,6 @@ function updateBoard(msg) {
   var data = JSON.parse(msg.data);
   window.enemies.clearEnemies();
   window.fireballs.clearFireballs();
-  window.playerAlive = false; 
-
   // If user ID not set, set it to the max playerId in server plus 1
   if (!window.userID) {
     window.userID = getMaxInArray(data.players)+1;
@@ -66,14 +64,11 @@ function updateBoard(msg) {
   }
 
 }
-
-
 // Helper functions:
 function getMaxInArray(numArray) {
   if (numArray.length===0) {return 0}
   return Math.max.apply(null, numArray);
 }
-
 function contains(array, value) {
   for (var j = 0; j<array.length; j++) {
     if (array[j]===value) {

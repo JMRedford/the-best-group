@@ -1,7 +1,6 @@
 // Loading scene
 // -------------
 // Handles the loading of binary assets such as images and audio files
-
 Crafty.scene('Loading', function(){
   // Draw some text for the player to see in case the file
   //  takes a noticeable amount of time to load
@@ -149,7 +148,7 @@ Crafty.scene('Game', function() {
 
 // GameOver Scene: Shows Background Image and text telling user they lost and how to play again or logout
 Crafty.scene('GameOver', function() {
-
+  
   Crafty.e("2D, Canvas, Image")
   .attr({w: 1000, h: 1000})
   .image("sprites/landscape.png", "repeat");
@@ -161,11 +160,10 @@ Crafty.scene('GameOver', function() {
   var text2 = Crafty.e("2D, Canvas, Text").textFont({ size: '20px', weight: 'bold' })
               .text("ESC to logout, Enter to play again")
               .attr({x:Game.width()/2, y: Game.height()/2, w: Game.width() })
-
+  
   Crafty.viewport.follow(text1,Game.width()/2,0);
   Crafty.viewport.scale(.65);
-  Crafty.keys.ENTER;
-
+  
   text1.requires('Keyboard')
   .bind('KeyDown', function (e) { 
     if (e.key === Crafty.keys.ENTER) {
