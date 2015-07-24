@@ -6,12 +6,16 @@
     "body-parser": "^1.9.2",
     "bower": "^1.4.1",
     "express": "^4.10.1",
+    "express-session": "^1.11.3",
     "express-ws": "^0.2.6",
-    "node-oauth2-server": "^2.0.2",
     "nodemon": "^1.2.1",
-    "pg": "^3.4.2"
-  }
-  "scripts": {
-    "start": "node ./server/main-server.js",
+    "passport": "^0.2.2",
+    "passport-github": "^0.1.7",
+    "passport-local": "^1.0.0",
+    "pg": "^3.4.2",
+    "request": "^2.60.0"
   },
+  "scripts": {
+    "start": "node ./server/main-server.js"
+  }
 }
