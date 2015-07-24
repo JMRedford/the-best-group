@@ -66,66 +66,100 @@ Crafty.scene('Game', function() {
   console.log('making player');
   window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(playerStartLoc[0], playerStartLoc[1]);
   Crafty.viewport.clampToEntities = false;
-  Crafty.viewport.follow(window.player,0,0)
+  Crafty.viewport.follow(window.player,0,0);
   player.direction = 'down';
 
-  player.bind("KeyDown", function(e) {
-    switch (e.key){
-      case Crafty.keys.SPACE:
-        var ID = userID + ',' + fireballs.getID();
-        newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: player.direction});
-
-        // switch(player.direction){
-        //   case 'up':
-        //     fireball.animate('flyUp',-1);
-        //     break;
-        //   case 'down':
-        //     fireball.animate('flyDown',-1);
-        //     break;
-        //   case 'right':
-        //     fireball.animate('flyRight',-1);
-        //     break;
-        //   case 'left':
-        //     fireball.animate('flyLeft',-1);
-        //     break;
-        // }
-        break;
-      case Crafty.keys.UP_ARROW || Crafty.keys.W:
-        this.animate('walkUp',-1);
-        player.direction = 'up';
-        break;
-      case Crafty.keys.DOWN_ARROW || Crafty.keys.S:
-        this.animate('walkDown',-1);
-        player.direction = 'down';
-        break;
-      case Crafty.keys.LEFT_ARROW || Crafty.keys.A:
-        this.animate('walkLeft',-1);
-        player.direction = 'left';
-        break;
-      case Crafty.keys.RIGHT_ARROW || Crafty.keys.D:
-        this.animate('walkRight',-1);
-        player.direction = 'right';
-        break;
+  player.bind('NewDirection', function(e) {
+    if (e.x === 0 && e.y === 0) { this.animate(player.direction); }
+    if (e.y < 0) {
+      player.direction = 'up';
+      this.animate('walkUp', -1);
     }
-
-  });
-  window.player.bind("KeyUp", function(e){
-    switch (e.key){
-      case Crafty.keys.UP_ARROW || Crafty.keys.W:
-        this.animate('up');
-        break;
-      case Crafty.keys.DOWN_ARROW || Crafty.keys.S:
-        this.animate('down');
-        break;
-      case Crafty.keys.LEFT_ARROW || Crafty.keys.A:
-        this.animate('left');
-        break;
-      case Crafty.keys.RIGHT_ARROW || Crafty.keys.D:
-        this.animate('right');
-        break;
+    if (e.y > 0) {
+      player.direction = 'down';
+      this.animate('walkDown', -1);
     }
-
+    if (e.x < 0) {
+      player.direction = 'left';
+      this.animate('walkLeft', -1);
+    }
+    if (e.x > 0) {
+      player.direction = 'right';
+      this.animate('walkRight', -1);
+    }
   });
+
+  player.bind('KeyDown', function(e) {
+    if (e.key === Crafty.keys.SPACE) {
+      var ID = userID + ',' + fireballs.getID();
+      var fbDir = '';
+      if (this._movement.y === 0 && this._movement.x === 0) { fbDir = player.direction; } 
+      if (this._movement.y < 0) { fbDir = 'up'; }
+      if (this._movement.y > 0) { fbDir = 'down'; }
+      if (this._movement.x < 0) { fbDir = 'left'; }
+      if (this._movement.x > 0) { fbDir = 'right'; }
+      newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: fbDir});
+      console.log(this._movement);
+    }
+  });
+
+  // player.bind("KeyDown", function(e) {
+  //   switch (e.key){
+  //     case Crafty.keys.SPACE:
+  //       var ID = userID + ',' + fireballs.getID();
+  //       newFireballs.push({t: Date.now(), loc: [player.at().x, player.at().y], ID: ID, dir: player.direction});
+
+  //       // switch(player.direction){
+  //       //   case 'up':
+  //       //     fireball.animate('flyUp',-1);
+  //       //     break;
+  //       //   case 'down':
+  //       //     fireball.animate('flyDown',-1);
+  //       //     break;
+  //       //   case 'right':
+  //       //     fireball.animate('flyRight',-1);
+  //       //     break;
+  //       //   case 'left':
+  //       //     fireball.animate('flyLeft',-1);
+  //       //     break;
+  //       // }
+  //       break;
+  //     case Crafty.keys.UP_ARROW || Crafty.keys.W:
+  //       this.animate('walkUp',-1);
+  //       player.direction = 'up';
+  //       break;
+  //     case Crafty.keys.DOWN_ARROW || Crafty.keys.S:
+  //       this.animate('walkDown',-1);
+  //       player.direction = 'down';
+  //       break;
+  //     case Crafty.keys.LEFT_ARROW || Crafty.keys.A:
+  //       this.animate('walkLeft',-1);
+  //       player.direction = 'left';
+  //       break;
+  //     case Crafty.keys.RIGHT_ARROW || Crafty.keys.D:
+  //       this.animate('walkRight',-1);
+  //       player.direction = 'right';
+  //       break;
+  //   }
+
+  // });
+  // window.player.bind("KeyUp", function(e){
+  //   switch (e.key){
+  //     case Crafty.keys.UP_ARROW || Crafty.keys.W:
+  //       this.animate('up');
+  //       break;
+  //     case Crafty.keys.DOWN_ARROW || Crafty.keys.S:
+  //       this.animate('down');
+  //       break;
+  //     case Crafty.keys.LEFT_ARROW || Crafty.keys.A:
+  //       this.animate('left');
+  //       break;
+  //     case Crafty.keys.RIGHT_ARROW || Crafty.keys.D:
+  //       this.animate('right');
+  //       break;
+  //   }
+
+  // });
 
 
 
@@ -155,23 +189,23 @@ Crafty.scene('GameOver', function() {
   
   var text1 = Crafty.e("2D, Canvas, Text").textFont({ size: '40px', weight: 'bold' })
               .text('Game Over')
-              .attr({x:Game.width()/2, y: Game.height()/2-50, w: Game.width() })
+              .attr({x:Game.width()/2, y: Game.height()/2-50, w: Game.width() });
 
   var text2 = Crafty.e("2D, Canvas, Text").textFont({ size: '20px', weight: 'bold' })
               .text("ESC to logout, Enter to play again")
-              .attr({x:Game.width()/2, y: Game.height()/2, w: Game.width() })
+              .attr({x:Game.width()/2, y: Game.height()/2, w: Game.width() });
   
   Crafty.viewport.follow(text1,Game.width()/2,0);
-  Crafty.viewport.scale(.65);
+  Crafty.viewport.scale(0.65);
   
   text1.requires('Keyboard')
   .bind('KeyDown', function (e) { 
     if (e.key === Crafty.keys.ENTER) {
-      Crafty.scene('Loading')
+      Crafty.scene('Loading');
     }
     else if (e.key === Crafty.keys.ESC) {
       // Logout 
     }
    });
-})
+});
 
