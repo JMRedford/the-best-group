@@ -43,14 +43,14 @@ function updateBoard(msg) {
     Crafty.scene("GameOver");
   }
 
-  for (var en = 0; en < data.enemies.length; en++) {
-    window.enemies.addEnemy(data.enemies[en]);
+  for (var i = 0; i < data.enemies.length; i++) {
+    window.enemies.addEnemy(data.enemies[i]);
   }
-  for (var p = 0; p < data.playerShotsData.length; p++) {
-    window.fireballs.addFireball(data.playerShotsData[p]);
+  for (var i = 0; i < data.playerShotsData.length; i++) {
+    window.fireballs.addPlayerFireball(data.playerShotsData[i]);
   }
-  for (var e = 0; e < data.enemyShotsData.length; e++) {
-    window.fireballs.addFireball(data.enemyShotsData[e]);
+  for (var i = 0; i < data.enemyShotsData.length; i++) {
+    window.fireballs.addFireball(data.enemyShotsData[i]);
   }
 
 }

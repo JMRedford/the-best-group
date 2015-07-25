@@ -38,10 +38,10 @@ var distance = function(loc1,loc2){
 };
 
 exports.init = function(){
-  create static objects
-  for (var j = 0; j < options.staticObjAmt; j++) {
-    exports.addStaticObject();
-  }
+  //create static objects
+  // for (var j = 0; j < options.staticObjAmt; j++) {
+  //   exports.addStaticObject();
+  // }
   // create enemies
   for (var i = 0; i < options.enemyAmt; i++) {
     exports.addEnemy();
