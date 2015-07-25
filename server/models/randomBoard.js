@@ -1,16 +1,13 @@
-var boardSize = 50;
+var exports = module.exports = {};
 
-var boardArray = [];
-for (var i = 0; i < boardSize; i++){
-  boardArray.push([]);
-  for (var j = 0; j < boardSize; j++){
-    boardArray[i].push(' ');
-  }
-}
+exports.boardSize = 50;
 
-var printBoard = function(){
-  for (var i = 0; i < boardSize; i++){
-    console.log(boardArray[i].join(''));
+exports.boardArray = [];
+
+for (var i = 0; i < exports.boardSize; i++){
+  exports.boardArray.push([]);
+  for (var j = 0; j < exports.boardSize; j++){
+    exports.boardArray[i].push(' ');
   }
 }
 
@@ -37,18 +34,19 @@ var forSpiral = function(p,sqMatrix,callback){
 }
 
 for (var i = 1; i < 10; i++){
-  forSpiral(i,boardArray, function(array,row,col){
+  forSpiral(i,exports.boardArray, function(array,row,col){
     array[row][col] = 'w';
   })
 }
+
 for (var i = 10; i < 15; i++){
-  forSpiral(i,boardArray, function(array,row,col){
+  forSpiral(i,exports.boardArray, function(array,row,col){
     array[row][col] = 'w';
     if (row === i-1 && array[row-1][col] === 's') {
       array[row][col] = 's';
-    } else if (col === boardSize-i && array[row][col+1] === 's') {
+    } else if (col === exports.boardSize-i && array[row][col+1] === 's') {
       array[row][col] = 's';   
-    } else if (row === boardSize-i && array[row+1][col] === 's') {
+    } else if (row === exports.boardSize-i && array[row+1][col] === 's') {
       array[row][col] = 's';
     } else if (col === i-1 && array[row][col-1] === 's') {
       array[row][col] = 's';
@@ -56,16 +54,16 @@ for (var i = 10; i < 15; i++){
       array[row][col] = 's';
     }
   });
-  forSpiral(i,boardArray, function(array,row,col){
+  forSpiral(i,exports.boardArray, function(array,row,col){
     if (row === i-1 && 
         array[row][col-1] && 
         array[row][col+1] === 's') {
       array[row][col] = 's';
-    } else if (col === boardSize-i && 
+    } else if (col === exports.boardSize-i && 
                array[row-1][col] === 's' &&
                array[row+1][col] === 's') {
       array[row][col] = 's';   
-    } else if (row === boardSize-i && 
+    } else if (row === exports.boardSize-i && 
                array[row][col-1] === 's' &&
                array[row][col+1]) {
       array[row][col] = 's';
@@ -76,17 +74,19 @@ for (var i = 10; i < 15; i++){
     }
   });
 }
-forSpiral(15,boardArray, function(array,row,col){
+
+forSpiral(15,exports.boardArray, function(array,row,col){
   array[row][col] = 's';
 })
-for (var i = 16; i <= boardSize/2; i++){
-  forSpiral(i,boardArray, function(array,row,col){
+
+for (var i = 16; i <= exports.boardSize/2; i++){
+  forSpiral(i,exports.boardArray, function(array,row,col){
     array[row][col] = 's';
     if (row === i-1 && array[row-1][col] === 'g') {
       array[row][col] = 'g';
-    } else if (col === boardSize-i && array[row][col+1] === 'g') {
+    } else if (col === exports.boardSize-i && array[row][col+1] === 'g') {
       array[row][col] = 'g';   
-    } else if (row === boardSize-i && array[row+1][col] === 'g') {
+    } else if (row === exports.boardSize-i && array[row+1][col] === 'g') {
       array[row][col] = 'g';
     } else if (col === i-1 && array[row][col-1] === 'g') {
       array[row][col] = 'g';
@@ -94,16 +94,16 @@ for (var i = 16; i <= boardSize/2; i++){
       array[row][col] = 'g';
     }
   });
-  forSpiral(i,boardArray, function(array,row,col){
+  forSpiral(i,exports.boardArray, function(array,row,col){
     if (row === i-1 && 
         array[row][col-1] && 
         array[row][col+1] === 'g') {
       array[row][col] = 'g';
-    } else if (col === boardSize-i && 
+    } else if (col === exports.boardSize-i && 
                array[row-1][col] === 'g' &&
                array[row+1][col] === 'g') {
       array[row][col] = 'g';   
-    } else if (row === boardSize-i && 
+    } else if (row === exports.boardSize-i && 
                array[row][col-1] === 'g' &&
                array[row][col+1]) {
       array[row][col] = 'g';

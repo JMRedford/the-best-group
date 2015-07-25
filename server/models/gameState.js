@@ -1,3 +1,5 @@
+var gameBoard = require('./randomBoard.js');
+
 var exports = module.exports = {};
 
 //server side game state storage here
@@ -24,8 +26,8 @@ var playerIdIncrementer = 0;
 var options = {
   enemyAmt: 4,
   staticObjAmt: 6,
-  maxX: 20,
-  maxY: 20,
+  maxX: 50,
+  maxY: 50,
   playerShotSpeed: 0.008,
   enemyRespawnTimeMin: 1000,
   enemyRespawnTimeMax: 5000
@@ -36,7 +38,7 @@ var distance = function(loc1,loc2){
 };
 
 exports.init = function(){
-  // create static objects
+  create static objects
   for (var j = 0; j < options.staticObjAmt; j++) {
     exports.addStaticObject();
   }
@@ -128,45 +130,45 @@ exports.randomWalk = function(enemy){
 
   enemy.delta = [newDx,newDy];
   enemy.loc = [enemy.loc[0]+newDx, enemy.loc[1]+newDy];
-  if (enemy.loc[0] < 1 || enemy.loc[0] > 18){
+  if (enemy.loc[0] < 1 || enemy.loc[0] > options.maxX-2){
     enemy.loc[0] = enemy.loc[0] - 2*newDx;
     enemy.delta[0] = -2 * newDx;
   }
-  if (enemy.loc[1] < 1 || enemy.loc[1] > 18){
+  if (enemy.loc[1] < 1 || enemy.loc[1] > options.maxX-2){
     enemy.loc[1] = enemy.loc[1] - 2*newDy;
     enemy.delta[1] = -2 * newDy;
   }
 
 
-  for (var i = 0; i < exports.staticObjects.length; i++){
-    if (exports.checkCollisions(enemy, exports.staticObjects[i])){
-      enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
-      enemy.delta = [-2*newDx,-2*newDy];
-    }
-  }
+  // for (var i = 0; i < exports.staticObjects.length; i++){
+  //   if (exports.checkCollisions(enemy, exports.staticObjects[i])){
+  //     enemy.loc = [enemy.loc[0] - 2*newDx, enemy.loc[1] - 2*newDy];
+  //     enemy.delta = [-2*newDx,-2*newDy];
+  //   }
+  // }
 
 };
 
-exports.addStaticObject = function() {
-  var newStaticObject = {};
-  var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5];
-  var goodLoc = true;
+// exports.addStaticObject = function() {
+//   var newStaticObject = {};
+//   var loc = [Math.random()*(options.maxX - 3) + 1.5,
+//              Math.random()*(options.maxY - 3) + 1.5];
+//   var goodLoc = true;
 
-  do {
-    goodLoc = true;
-    for (var i = 0; i < exports.staticObjects.length; i++){
-      if (exports.checkCollisions({loc:loc},exports.staticObjects[i])){
-        goodLoc = false;
-      }
-    }
-    loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5];
-  } while (!goodLoc);
+//   do {
+//     goodLoc = true;
+//     for (var i = 0; i < exports.staticObjects.length; i++){
+//       if (exports.checkCollisions({loc:loc},exports.staticObjects[i])){
+//         goodLoc = false;
+//       }
+//     }
+//     loc = [Math.random()*(options.maxX - 3) + 1.5,
+//            Math.random()*(options.maxY - 3) + 1.5];
+//   } while (!goodLoc);
 
-  newStaticObject.loc = loc;
-  exports.staticObjects.push(newStaticObject);
-};
+//   newStaticObject.loc = loc;
+//   exports.staticObjects.push(newStaticObject);
+// };
 
 exports.checkCollisions = function(a, b){
   // check for box collision between two
@@ -208,7 +210,7 @@ exports.tickTime = function(){
   var enemiesToRemove = [];
   for (var i = 0; i < exports.playerShots.length; i++){
     var shot = {loc: exports.vectorTransform(exports.playerShots[i])};
-    if (shot.loc[0] > 20 || shot.loc[0] < 0 || shot.loc[1] < 0 || shot.loc[1] > 20){
+    if (shot.loc[0] > options.maxX || shot.loc[0] < 0 || shot.loc[1] < 0 || shot.loc[1] > options.maxY){
       playerShotsToRemove.push(i);
     }
     for (var j = 0; j < exports.staticObjects.length; j++){
@@ -292,13 +294,14 @@ exports.sendGameStateToPlayer = function(connection) {
 exports.build = {
   enemies: exports.enemies,
   staticObjects: exports.staticObjects,
-  borderX: options.maxX,
-  borderY: options.maxY,
+  borderX: gameBoard.boardSize,
+  borderY: gameBoard.boardSize,
+  board: gameBoard.boardArray
 };
 
 exports.addPosAndIdToBuild = function(){
-  var loc = [Math.random()*(options.maxX - 3) + 1.5,
-             Math.random()*(options.maxY - 3) + 1.5];
+  var loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
+             Math.random()*(gameBoard.boardSize - 3) + 1.5];
   var goodLoc = true;
 
   do {
@@ -307,8 +310,8 @@ exports.addPosAndIdToBuild = function(){
         goodLoc = false;
       }
     }
-    loc = [Math.random()*(options.maxX - 3) + 1.5,
-           Math.random()*(options.maxY - 3) + 1.5];
+    loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
+           Math.random()*(gameBoard.boardSize - 3) + 1.5];
   } while (!goodLoc);
   exports.build.playerStartX = loc[0];
   exports.build.playerStartY = loc[1];
