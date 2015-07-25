@@ -65,7 +65,7 @@ Crafty.c('PlayerCharacter', {
 Crafty.c('Boundary', {
   init: function() {
     this.requires('Actor, Color, Solid, Image')
-    .image('sprites/mountain.png')
+    .image('sprites/mountain.png');
   }
 });
 
@@ -73,13 +73,13 @@ Crafty.c('Boundary', {
 Crafty.c('Rock', {
   init: function() {
     this.requires('Actor, Solid, Image')
-    .image("sprites/rock.png")
+    .image("sprites/rock.png");
   }
 });
 
 Crafty.c('Enemy', {
   init: function() {
-    this.requires('Actor, Image, Solid')
+    this.requires('Actor, Image')
       .image('sprites/Enemy.png');
   }
 });
