@@ -10,7 +10,7 @@ GET / HTTP/1.1
         Sec-WebSocket-Protocol: chat, superchat
         Sec-WebSocket-Version: 13
 */
-var host = location.origin.replace(/^http/, 'ws')
+var host = location.origin.replace(/^http/, 'ws');
 
 function startWebSocket() {
   window.ws = new WebSocket(host);
@@ -50,7 +50,7 @@ function updateBoard(msg) {
   }
   // Else if server does not contain player id, player lost... go to gameover scene
   else if (!contains(data.players, window.userID)) {
-    Crafty.scene("GameOver")
+    Crafty.scene("GameOver");
   }
 
   for (var en = 0; en < data.enemies.length; en++) {
@@ -66,13 +66,13 @@ function updateBoard(msg) {
 }
 // Helper functions:
 function getMaxInArray(numArray) {
-  if (numArray.length===0) {return 0}
+  if (numArray.length === 0) {return 0;}
   return Math.max.apply(null, numArray);
 }
 function contains(array, value) {
-  for (var j = 0; j<array.length; j++) {
-    if (array[j]===value) {
-      return true
+  for (var j = 0; j < array.length; j++) {
+    if (array[j][0] === value) {
+      return true;
     }
   }
   return false;
