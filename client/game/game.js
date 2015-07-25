@@ -46,8 +46,8 @@ window.playerStartLoc = [5,5];
 Game = {
   // This defines our grid's size and the size of each of its tiles
   map_grid: {
-    width:  20,
-    height: 20,
+    width:  50,
+    height: 50,
     tile: {
       width:  32,
       height: 32
@@ -75,12 +75,12 @@ Game = {
 
     this.map_grid.width  = data.borderX;
     this.map_grid.height = data.borderY;
-    this.rocks  = data.staticObjects;
+    // this.rocks  = data.staticObjects;
     playerStartLoc = [data.playerStartX, data.playerStartY];
     window.userID = data.pId;
 
-    Crafty.init(Game.width(), Game.height());
+    Crafty.init(20*32, 20*32);
     //Crafty.background('url(sprites/landscape.png) fixed' );
-    Crafty.scene('Loading');
+    Crafty.scene('Loading', data);
   }
 };

@@ -1,16 +1,6 @@
 
-//This sends something like
-/*
-GET / HTTP/1.1
-        Host: 127.0.0.1:3000
-        Upgrade: websocket
-        Connection: Upgrade
-        Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
-        Origin: http://example.com
-        Sec-WebSocket-Protocol: chat, superchat
-        Sec-WebSocket-Version: 13
-*/
 var host = location.origin.replace(/^http/, 'ws');
+
 
 function startWebSocket() {
   window.ws = new WebSocket(host);
