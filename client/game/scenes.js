@@ -14,7 +14,8 @@ Crafty.scene('Loading', function(data){
                          "sprites/mountain.png", 
                          "sprites/Water.png", 
                          "sprites/Sand.png", 
-                         "sprites/Grass.png"]}, function(){
+                         "sprites/Grass.png",
+                         "sprites/blueEnergy.png"]}, function(){
 
     Crafty.sprite(32, 'sprites/gokuSprite.png', {
      down :         [0, 0],

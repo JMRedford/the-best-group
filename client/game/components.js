@@ -99,6 +99,18 @@ Crafty.c('Fireball', {
   }
 });
 
+Crafty.c('playerFireball', {
+  init: function() {
+    this.requires('Actor, Collision, Image')
+    .image('sprites/blueEnergy.png');
+    this.destroyOnSolids();
+  },
+
+  destroyOnSolids: function(){
+    this.onHit('Solid', this.destroy);
+  }
+});
+
 Crafty.c('Water', {
   init: function() {
     this.requires('Actor, Solid ,Image')

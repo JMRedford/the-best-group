@@ -11,11 +11,17 @@ window.fireballs = {
      this.storage[this.getID()] = Crafty.e('Fireball')
     .at(fbLoc[0],fbLoc[1]);
   },
+  addPlayerFireball: function (fbLoc) {
+     this.storage[this.getID()] = Crafty.e('playerFireball')
+    .at(fbLoc[0],fbLoc[1]);
+  },
   clearFireballs: function(){
     Crafty("Fireball").each(function(i){
       this.destroy();
     });
-
+    Crafty("playerFireball").each(function(i){
+      this.destroy();
+    });
     this.storage = {};
   },
 
