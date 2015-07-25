@@ -34,25 +34,27 @@ function updateBoard(msg) {
   var data = JSON.parse(msg.data);
   window.enemies.clearEnemies();
   window.fireballs.clearFireballs();
-  // If user ID not set, set it to the max playerId in server plus 1
-  if (!window.userID) {
-    window.userID = getMaxInArray(data.players)+1;
-  }
-  // Else if server does not contain player id, player lost... go to gameover scene
-  else if (!contains(data.players, window.userID)) {
+
+  if (data.gameLost) {
+    console.log('game over');
     Crafty.scene("GameOver");
-  }
+  } else {
+    // If user ID not set, set it to the max playerId in server plus 1
+    if (!window.userID) {
+      window.userID = getMaxInArray(data.players)+1;
+    }
+    
 
-  for (var i = 0; i < data.enemies.length; i++) {
-    window.enemies.addEnemy(data.enemies[i]);
+    for (var i = 0; i < data.enemies.length; i++) {
+      window.enemies.addEnemy(data.enemies[i]);
+    }
+    for (var i = 0; i < data.playerShotsData.length; i++) {
+      window.fireballs.addPlayerFireball(data.playerShotsData[i]);
+    }
+    for (var i = 0; i < data.enemyShotsData.length; i++) {
+      window.fireballs.addFireball(data.enemyShotsData[i]);
+    }
   }
-  for (var i = 0; i < data.playerShotsData.length; i++) {
-    window.fireballs.addPlayerFireball(data.playerShotsData[i]);
-  }
-  for (var i = 0; i < data.enemyShotsData.length; i++) {
-    window.fireballs.addFireball(data.enemyShotsData[i]);
-  }
-
 }
 // Helper functions:
 function getMaxInArray(numArray) {
