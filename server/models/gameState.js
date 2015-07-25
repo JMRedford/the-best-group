@@ -34,12 +34,13 @@ var distance = function(loc1,loc2){
 };
 
 exports.init = function(){
+  // create static objects
+  for (var j = 0; j < options.staticObjAmt; j++) {
+    exports.addStaticObject();
+  }
   // create enemies
   for (var i = 0; i < options.enemyAmt; i++) {
     exports.addEnemy();
-  }
-  for (var j = 0; j < options.staticObjAmt; j++) {
-    exports.addStaticObject();
   }
 };
 
@@ -84,8 +85,9 @@ exports.addEnemy = function(){
   var goodLoc = true;
 
   do {
-    for (var i = 0; i < exports.players.length; i++){
-      if (exports.checkCollisions(exports.players[i].loc,loc)) {
+    goodLoc = true;
+    for (var i = 0; i < exports.players.length; i++) {
+      if (exports.checkCollisions(exports.players[i], {loc:loc})) {
         goodLoc = false;
       }
     }
@@ -94,8 +96,9 @@ exports.addEnemy = function(){
   } while (!goodLoc);
 
   do {
-    for (var i = 0; i < exports.staticObjects.length; i++){
-      if (exports.checkCollisions(exports.staticObjects[i].loc,loc)) {
+    goodLoc = true;
+    for (var i = 0; i < exports.staticObjects.length; i++) {
+      if (exports.checkCollisions(exports.staticObjects[i], {loc:loc})) {
         goodLoc = false;
       }
     }
@@ -218,7 +221,12 @@ exports.tickTime = function(){
       }
     }
   }
-  enemiesToRemove.sort(function(a,b){ return a - b });
+
+  for (var i = 0; i < enemiesToRemove.length; i++) {
+    exports.addEnemy();
+  }
+
+  enemiesToRemove.sort(function(a,b){ return a - b; });
   for (var i = enemiesToRemove.length - 1; i >= 0; i--){
     exports.enemies.splice(enemiesToRemove[i],1);
   }
