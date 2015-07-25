@@ -77,7 +77,7 @@ Game = {
     this.map_grid.height = data.borderY;
     this.rocks  = data.staticObjects;
     playerStartLoc = [data.playerStartX, data.playerStartY];
-    userID = data.pid;
+    window.userID = data.pId;
 
     Crafty.init(Game.width(), Game.height());
     //Crafty.background('url(sprites/landscape.png) fixed' );
