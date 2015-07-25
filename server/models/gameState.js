@@ -24,7 +24,7 @@ var playerIdIncrementer = 0;
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
 
 var options = {
-  enemyAmt: 4,
+  enemyAmt: 20,
   staticObjAmt: 6,
   maxX: 50,
   maxY: 50,
@@ -225,12 +225,10 @@ exports.tickTime = function(){
       }
     }
   }
-
   for (var i = 0; i < enemiesToRemove.length; i++) {
     setTimeout(exports.addEnemy, 
       (Math.random() * options.enemyRespawnTimeMax) + options.enemyRespawnTimeMin);
   }
-
   enemiesToRemove.sort(function(a,b){ return a - b; });
   for (var i = enemiesToRemove.length - 1; i >= 0; i--){
     exports.enemies.splice(enemiesToRemove[i],1);
@@ -239,14 +237,30 @@ exports.tickTime = function(){
     exports.playerShots.splice(playerShotsToRemove[i],1);
   }
 
+  var playersToRemove = [];
+  for (var i = 0; i < exports.players.length; i++){
+    for (var j = 0; j < exports.enemyShots.length; j++){
+      var shot = {loc: exports.vectorTransform(exports.enemyShots[j])}
+      if (exports.players[i].loc){
+        if (exports.checkCollisions(exports.players[i],shot)){
+          playersToRemove.push(i);
+        }
+      }
+    }
+  }
+  for (var i = playersToRemove.length - 1; i >= 0; i--){
+    exports.players[playersToRemove[i]].conn.send(JSON.stringify({gameLost:true}));
+    exports.players.splice(playersToRemove[i],1);
+  }
+
   // loop through the players
   //  send data to player through their connections
-  for (var j = exports.players.length - 1; j >= 0; j--){
+  for (var i = exports.players.length - 1; i >= 0; i--){
     try {
-      exports.sendGameStateToPlayer(exports.players[j].conn);
+      exports.sendGameStateToPlayer(exports.players[i].conn);
     } catch (err){
       //remove player from array
-      exports.players.splice(j,1);
+      exports.players.splice(i,1);
     }
   }
 };
@@ -270,7 +284,7 @@ exports.sendGameStateToPlayer = function(connection) {
   var toRemove = [];
   for (var k = 0; k < exports.enemyShots.length; k++) {
     var shotLoc = exports.vectorTransform(exports.enemyShots[k]);
-    if (shotLoc[0] > 18 || shotLoc[1] > 18 || shotLoc[0] < 1 || shotLoc[1] < 1){
+    if (shotLoc[0] > options.maxX || shotLoc[1] > options.maxY || shotLoc[0] < 1 || shotLoc[1] < 1){
       toRemove.push(k);
     } else {
       enemyShotsData.push(shotLoc);
@@ -300,18 +314,24 @@ exports.build = {
 };
 
 exports.addPosAndIdToBuild = function(){
-  var loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
-             Math.random()*(gameBoard.boardSize - 3) + 1.5];
-  var goodLoc = true;
-
   do {
+    var loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
+             Math.random()*(gameBoard.boardSize - 3) + 1.5];
+    var row = Math.floor(loc[0]);
+    var col = Math.floor(loc[1]);
+    var goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
-      if (distance(loc, exports.enemies[i].loc) < 1.5) {
+      if (distance(loc, exports.enemies[i].loc) < 3.5) {
         goodLoc = false;
       }
+      for (var j = -1; j < 2; j++){
+        for (var k = -1; k < 2; k++){
+          if (gameBoard.boardArray[row+j][col+k] === 'w'){
+            goodLoc = false;
+          }
+        }
+      }
     }
-    loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
-           Math.random()*(gameBoard.boardSize - 3) + 1.5];
   } while (!goodLoc);
   exports.build.playerStartX = loc[0];
   exports.build.playerStartY = loc[1];
