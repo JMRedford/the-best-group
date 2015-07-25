@@ -8,16 +8,14 @@ window.fireballs = {
     return this.fbID;
   },
   addFireball: function (fbLoc) {
-     this.storage[this.getID] = Crafty.e('Fireball')
+     this.storage[this.getID()] = Crafty.e('Fireball')
     .at(fbLoc[0],fbLoc[1]);
   },
   clearFireballs: function(){
     Crafty("Fireball").each(function(i){
       this.destroy();
     });
-    for (var key in this.storage) {
-      this.storage[key].destroy();
-    }
+
     this.storage = {};
   },
 
@@ -25,7 +23,7 @@ window.fireballs = {
 };
 
 window.enemies = {
-  enemiesNum : 0,
+  enemiesNum: 0,
 
   addEnemy: function(enemy){
     this.storage[this.enemiesNum++] = Crafty.e('Enemy')
@@ -35,6 +33,9 @@ window.enemies = {
     Crafty("Enemy").each(function(i){
       this.destroy();
     });
+
+    this.storage = {};
+    this.enemiesNum = 0;
   },
   storage: {}
 };
