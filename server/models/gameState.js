@@ -26,7 +26,9 @@ var options = {
   staticObjAmt: 6,
   maxX: 20,
   maxY: 20,
-  playerShotSpeed: 0.008
+  playerShotSpeed: 0.008,
+  enemyRespawnTimeMin: 1000,
+  enemyRespawnTimeMax: 5000
 };
 
 var distance = function(loc1,loc2){
@@ -223,7 +225,8 @@ exports.tickTime = function(){
   }
 
   for (var i = 0; i < enemiesToRemove.length; i++) {
-    exports.addEnemy();
+    setTimeout(exports.addEnemy, 
+      (Math.random() * options.enemyRespawnTimeMax) + options.enemyRespawnTimeMin);
   }
 
   enemiesToRemove.sort(function(a,b){ return a - b; });
