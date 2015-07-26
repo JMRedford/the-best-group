@@ -79,6 +79,7 @@ exports.addPlayer = function(ws){
   var newPlayer = {};
   newPlayer.conn = ws;
   newPlayer.pId = exports.build.pId;
+  newPlayer.loc = [exports.build.playerStartX, exports.build.playerStartY];
   exports.players.push(newPlayer);
 };
 
@@ -236,6 +237,16 @@ exports.tickTime = function(){
   for (var i = playerShotsToRemove.length - 1; i >= 0; i--){
     exports.playerShots.splice(playerShotsToRemove[i],1);
   }
+  var enemyShotsToRemove = [];
+  for (var k = 0; k < exports.enemyShots.length; k++) {
+    var shotLoc = exports.vectorTransform(exports.enemyShots[k]);
+    if (shotLoc[0] > options.maxX || shotLoc[1] > options.maxY || shotLoc[0] < 1 || shotLoc[1] < 1){
+      enemyShotsToRemove.push(k);
+    }
+  }
+  for (var l = enemyShotsToRemove.length - 1; l >= 0; l--){
+    exports.enemyShots.splice(l,1);
+  }
 
   var playersToRemove = [];
   for (var i = 0; i < exports.players.length; i++){
@@ -257,7 +268,8 @@ exports.tickTime = function(){
   //  send data to player through their connections
   for (var i = exports.players.length - 1; i >= 0; i--){
     try {
-      exports.sendGameStateToPlayer(exports.players[i].conn);
+
+      exports.sendGameStateToPlayer(exports.players[i].conn, exports.players[i].loc);
     } catch (err){
       //remove player from array
       exports.players.splice(i,1);
@@ -265,8 +277,14 @@ exports.tickTime = function(){
   }
 };
 
+var onScreen = function(playerLoc, thingLoc) {
+  return ((thingLoc[0] > playerLoc[0] - 10) &&
+          (thingLoc[0] < playerLoc[0] + 10) &&
+          (thingLoc[1] > playerLoc[1] - 10) &&
+          (thingLoc[1] < playerLoc[1] + 10));
+}
 
-exports.sendGameStateToPlayer = function(connection) {
+exports.sendGameStateToPlayer = function(connection, playerLoc) {
 
   var playerData = [];
   var enemyData = [];
@@ -276,25 +294,24 @@ exports.sendGameStateToPlayer = function(connection) {
   var data = {};
 
   for (var i = 0; i < exports.players.length; i++) {
-    playerData.push([exports.players[i].pId , exports.players[i].loc]);
-  }
-  for (var j = 0; j < exports.enemies.length; j++) {
-    enemyData.push(exports.enemies[j].loc);
-  }
-  var toRemove = [];
-  for (var k = 0; k < exports.enemyShots.length; k++) {
-    var shotLoc = exports.vectorTransform(exports.enemyShots[k]);
-    if (shotLoc[0] > options.maxX || shotLoc[1] > options.maxY || shotLoc[0] < 1 || shotLoc[1] < 1){
-      toRemove.push(k);
-    } else {
-      enemyShotsData.push(shotLoc);
+    if (onScreen(playerLoc, exports.players[i].loc)) {
+      playerData.push([exports.players[i].pId , exports.players[i].loc]);
     }
   }
-  for (var l = toRemove.length - 1; l >= 0; l--){
-    exports.enemyShots.splice(l,1);
+  for (var i = 0; i < exports.enemies.length; i++) {
+    if (onScreen(playerLoc, exports.enemies[i].loc)) {
+      enemyData.push(exports.enemies[i].loc);
+    }
   }
-  for (var m = 0; m < exports.playerShots.length; m++) {
-    playerShotsData.push(exports.vectorTransform(exports.playerShots[m]));
+  for (var i = 0; i < exports.enemyShots.length; i++) {
+    if (onScreen(playerLoc, exports.vectorTransform(exports.enemyShots[i]))) {
+      enemyShotsData.push(exports.vectorTransform(exports.enemyShots[i]));
+    }
+  }
+  for (var i = 0; i < exports.playerShots.length; i++) {
+    if (onScreen(playerLoc, exports.vectorTransform(exports.playerShots[i]))) {
+      playerShotsData.push(exports.vectorTransform(exports.playerShots[i]));
+    }
   }
 
   data.players = playerData;
