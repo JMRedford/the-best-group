@@ -7,9 +7,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 
 
-CREATE SCHEMA test;
-
-CREATE TABLE "users" (
+CREATE TABLE users (
   "user_id" serial NOT NULL,
   "username" varchar NOT NULL,
   "github_id" bigint,
