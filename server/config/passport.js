@@ -4,33 +4,63 @@ var User = require('../models/userModel.js');
 
 module.exports = function(passport) {
 
-  passport.serialize(function(user, done) {
+  passport.serializeUser(function(user, done) {
     done(null, user.github_id);
   });
 
-  // need to query the database and find the user
-  //  based on their github id.  will work on a query
-  //  file.
-  passport.deserialize(function(obj, done) {
-    done(null, obj)
-};
-  // need to add a callbackURL 
+
+  passport.deserializeUser(function(github_id, done) {
+    User.queryByGitHubId(github_id, function(err, user) {
+      if(user) {
+        done(null, user);
+      } else {
+        done(err, null);
+      }
+    });
+  });
+
+
+// -------------------- GITHUB STRATEGY ---------------------
+
 
 passport.use(new GitHubStrategy({
 
-  clientID : GITHUB_CLIENT_ID,
-  clientSecret : GITHUB_CLIENT_SECRET,
-  callbackURL : "http://127.0.0.1:3000/auth/github/callback"
+  clientID : 'aeebe8219464e9582cc1',
+  clientSecret : 'd17f30552c59f0b2c770578333082cc8349bef05',
+  callbackURL : "http://127.0.0.1:3000/auth/github/callback",
 
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification
     process.nextTick(function() {
 
-      // need to utilize db querying to add the username
+      var github_id = profile.id;
 
-      return done(null, profile);
+      User.queryByGitHubId(github_id, function(err, user) {
+        if(err) {
+          return done(err);
+        }
 
-    });
-  }
-}))
+        if(user) {
+          return done(null, user);
+        } else {
+          var newUser = {};
+
+          newUser.github_id = profile.id;
+          newUser.github_token = accessToken;
+          newUser.username = profile.displayName;
+
+          User.addGitHubUser(newUser, function(err, results) {
+            if(err) {
+              throw err;
+            }
+            return done(null, newUser);
+          })
+        }
+      })
+    })
+  })
+
+)};
+
+

@@ -1,9 +1,9 @@
-var db = require('../db/connection.js');
+var db = require('../db/connection.js').db;
 
 // Utility database functions
 
 exports.getAllUsers = function(cb) {
-  var queryStr = "SELECT * FROM Users;";
+  var queryStr = "SELECT * FROM users;";
   db.query(queryStr, function(err, results) {
     if(err) {
       console.log("Error in querying all users");
@@ -13,31 +13,28 @@ exports.getAllUsers = function(cb) {
   });
 }
 
-// If we ever wanted to add generic login alongside OAuth
-
-// exports.addUser = function(user, cb) {
-//   var queryStr = "INSERT INTO Users (username, password) VALUES ("
-//                  + "'" + user.username + "', "
-//                  + "'" + user.password + "') RETURNING id;";
-  
-//   db.query(queryStr, function(err, results) {
-//     if(err) {
-//       console.log("Error inserting a user");
-//     } else {
-//       cb(null, results.rows[0]);
-//     }
-//   });
-// }
+exports.queryByGitHubId = function(id, cb) {
+  var queryStr = "SELECT * FROM users WHERE github_id = "
+                 + "'" + id + "';";
+  db.query(queryStr, function(err, results) {
+    if(err) {
+      console.log("we have an error");
+      cb(err, null);
+    } else {
+      cb(null, results.rows);
+    }
+  })
+}
 
 exports.addGitHubUser = function(user, cb) {
-  var queryStr = "INSERT INTO Users (github_id, github_token, username) VALUES ("
+  var queryStr = "INSERT INTO users (github_id, github_token, username) VALUES ("
                  + "'" + user.github_id + "', "
                  + "'" + user.github_token + "', "
                  + "'" + user.username + "') RETURNING id;";
 
   db.query(queryStr, function(err, results) {
     if(err) {
-      console.log("Error inserting a github user");
+      cb(err, null);
     } else {
       cb(null, results);
     }
