@@ -15,16 +15,19 @@ gameState.init();
 
 setInterval(gameState.tickTime, 30);
 
+// The intial static page seen by player
 app.get('/', function(req, res) {
   res.render('index.html');
 });
 
+// The response to this request conatins all the necessary information for
+// the client to build a gameboard after which client establishes websocket connection
 app.get('/start', function(req, res) {
   gameState.addPosAndIdToBuild();
   res.json(gameState.build);
 });
 
-/* Route to handle websocket request */
+/* Route to handle websocket request from client on game init */
 app.ws('/', function(ws, req) {
   gameState.addPlayer(ws);
   ws.on('message', function(msg) {

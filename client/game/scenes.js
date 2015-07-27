@@ -1,3 +1,6 @@
+// This file is all of the 'Scenes' used by crafty, which represent each 'state' 
+// of the game the player sees
+
 // Loading scene
 // -------------
 // Handles the loading of binary assets such as images and audio files
@@ -7,7 +10,7 @@ Crafty.scene('Loading', function(data){
   Crafty.e('2D, DOM, Text')
     .text('Loading...')
     .attr({ x: 0, y: Game.height()/2 - 24, w: Game.width() });
-  // Load our sprite map image
+  // Load the sprite map images
   Crafty.load({"images":['sprites/gokuSprite.png', 
                          'sprites/FB.png',
                          "sprites/rock.png", 
@@ -17,6 +20,7 @@ Crafty.scene('Loading', function(data){
                          "sprites/Grass.png",
                          "sprites/blueEnergy.png"]}, function(){
 
+// These lines tell Crafty which squares in the sprite map are frames for which animations
     Crafty.sprite(32, 'sprites/gokuSprite.png', {
      down :         [0, 0],
      downWalk1 :    [1, 0],
@@ -60,10 +64,11 @@ Crafty.scene('Game', function(data) {
 
   console.log('started game scene');
 
-  window.board = []
+  window.board = [];
   window.boardCtr = 0;
   window.data=data;
   
+  // Sets the board to an array of tiles defined in the response to the '/start' GET request
   window.setBoard = function() {
     for (var i = 0; i < window.data.board.length; i++){
       for (var j = 0; j < window.data.board[i].length; j++){
@@ -76,9 +81,9 @@ Crafty.scene('Game', function(data) {
         }
       }
     }
-  }
+  };
 
-  window.setBoard()
+  window.setBoard();
 
   // window.bg = Crafty.e("2D, Canvas, Image")
   // .attr({w: 1000, h: 1000})
@@ -86,10 +91,14 @@ Crafty.scene('Game', function(data) {
 
   console.log('making player');
   window.player = Crafty.e('PlayerCharacter, SpriteAnimation, down').at(playerStartLoc[0], playerStartLoc[1]);
-  Crafty.viewport.follow(window.player,0,0)
+
+  // Crafty's viewport system handles the scrolling
+  Crafty.viewport.follow(window.player,0,0);
   Crafty.viewport.clampToEntities = true;
   player.direction = 'down';
 
+  // This changes the player animation in response to direction events emitted by 
+  // Crafty's keyboard control system: 'Fourway'
   player.bind('NewDirection', function(e) {
     if (e.x === 0 && e.y === 0) { this.animate(player.direction); }
     if (e.y < 0) {
@@ -110,6 +119,8 @@ Crafty.scene('Game', function(data) {
     }
   });
 
+  // Handles creation of a new player fireball on SPACEBAR, including ID number based on userID 
+  // and timestamp of when it was created so that it's current position can be accurately calculated server side
   player.bind('KeyDown', function(e) {
     if (e.key === Crafty.keys.SPACE) {
       var ID = userID + ',' + fireballs.getID();
@@ -128,7 +139,7 @@ Crafty.scene('Game', function(data) {
 // GameOver Scene: Shows Background Image and text telling user they lost and how to play again or logout
 Crafty.scene('GameOver', function() {
   
-  window.setBoard()  
+  window.setBoard();
 
   var text1 = Crafty.e("2D, Canvas, Text").textFont({ size: '40px', weight: 'bold' })
               .text('Game Over')
@@ -143,7 +154,7 @@ Crafty.scene('GameOver', function() {
   text1.requires('Keyboard')
   .bind('KeyDown', function (e) { 
     if (e.key === Crafty.keys.ENTER) {
-     initBoard(window.data)
+     initBoard(window.data);
     }
     else if (e.key === Crafty.keys.ESC) {
       // Logout 
