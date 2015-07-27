@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/../client'));
 // enemy amts and static object amts
 gameState.init();
 
-setInterval(gameState.tickTime, 30);
+setInterval(gameState.tickTime, 100);
 
 // The intial static page seen by player
 app.get('/', function(req, res) {

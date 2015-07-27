@@ -29,7 +29,7 @@ var playerIdIncrementer = 0;
 
 // Options regarding board size, projectile speed, etc...
 var options = {
-  enemyAmt: 20,
+  enemyAmt: 10,
   staticObjAmt: 6,
   maxX: 50,
   maxY: 50,
