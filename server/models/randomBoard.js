@@ -1,4 +1,6 @@
 // This file handles creation of the random 'island' board (with MATH!)
+// For those interested in Mega Hyper Nightmare Mode, check this link out
+// https://github.com/jaredhanson/passport-github.
 
 var exports = module.exports = {};
 

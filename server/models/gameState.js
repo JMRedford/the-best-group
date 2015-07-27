@@ -105,6 +105,7 @@ exports.addEnemy = function(){
              Math.random()*(options.maxY - 3) + 1.5];
   var goodLoc = true;
 
+  // refactor to a util function 
   do {
     goodLoc = true;
     for (var i = 0; i < exports.players.length; i++) {
