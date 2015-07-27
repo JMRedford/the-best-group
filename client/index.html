@@ -23,6 +23,7 @@
   </h3>
 </div>
    <button id="startButton"> Click to Play </button>
+   <a id="logout" href="/logout"></a>
    <script>
       $('#startButton').click(function() {
         $('#startButton').remove();
@@ -35,11 +36,10 @@
                  }
         });
       });
-      $('#cr-stage').keydown(function(e) {
-        if(e.keyCode === 27) {
-          $.ajax({ type: 'GET',
-                   url: '/logout'
-         })          
+      $(document).on('keydown', function (e){
+        if(e.keyCode == 27) {
+          console.log('i was clicked!')
+          window.location.href = $('#logout')[0];
         }
       })
     </script>
