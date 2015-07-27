@@ -15,7 +15,11 @@ for (var i = 0; i < exports.boardSize; i++){
   }
 }
 
+
 var forSpiral = function(p,sqMatrix,callback){
+  //A helper function that takes a square matrix and runs a
+  // callback function on the pth circular layer, counting
+  // inward, starting at 1
   var n = sqMatrix.length;
   if (p > Math.ceil(n/2)) return null;
 
@@ -37,6 +41,8 @@ var forSpiral = function(p,sqMatrix,callback){
   }
 }
 
+//make water from the outside layer of the map in far enough that
+// the player view never sees the edge of the map
 for (var i = 1; i < 10; i++){
   forSpiral(i,exports.boardArray, function(array,row,col){
     array[row][col] = 'w';
@@ -44,6 +50,7 @@ for (var i = 1; i < 10; i++){
 }
 
 for (var i = 10; i < 15; i++){
+  //Randomly (30 percent chance) add sand
   forSpiral(i,exports.boardArray, function(array,row,col){
     array[row][col] = 'w';
     if (row === i-1 && array[row-1][col] === 's') {
@@ -58,6 +65,8 @@ for (var i = 10; i < 15; i++){
       array[row][col] = 's';
     }
   });
+  //Now, if there is s,w,s , replace it with s,s,s to avoid wonky
+  // maps with long fingers of water reaching into the land
   forSpiral(i,exports.boardArray, function(array,row,col){
     if (row === i-1 && 
         array[row][col-1] && 
@@ -79,10 +88,12 @@ for (var i = 10; i < 15; i++){
   });
 }
 
+//Add a layer of sand
 forSpiral(15,exports.boardArray, function(array,row,col){
   array[row][col] = 's';
 })
 
+//grass part, same as sand part
 for (var i = 16; i <= exports.boardSize/2; i++){
   forSpiral(i,exports.boardArray, function(array,row,col){
     array[row][col] = 's';
