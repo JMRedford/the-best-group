@@ -1,0 +1,11 @@
+body {
+	text-align: center;
+}
+
+#cr-stage {
+	padding-left: 30;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
