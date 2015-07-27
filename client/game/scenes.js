@@ -18,7 +18,8 @@ Crafty.scene('Loading', function(data){
                          "sprites/Water.png", 
                          "sprites/Sand.png", 
                          "sprites/Grass.png",
-                         "sprites/blueEnergy.png"]}, function(){
+                         "sprites/blueEnergy.png",
+                         "sprites/Krillin.png"]}, function(){
 
 // These lines tell Crafty which squares in the sprite map are frames for which animations
     Crafty.sprite(32, 'sprites/gokuSprite.png', {

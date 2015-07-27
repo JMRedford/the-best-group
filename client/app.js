@@ -60,6 +60,9 @@ function updateBoard(msg) {
     for (var i = 0; i < data.enemyShotsData.length; i++) {
       window.fireballs.addFireball(data.enemyShotsData[i]);
     }
+    for (var i = 0; i < data.players.length; i++) {
+      window.players.addPlayer(data.players[i][1]);
+    }
   }
 }
 // Helper functions:

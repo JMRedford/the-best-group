@@ -50,6 +50,14 @@ window.enemies = {
   storage: {}
 };
 
+window.players = {
+  playerNum: 0,
+  addPlayer: function(player) {
+    this.storage[this.playerNum++] = Crafty.e('PlayerCharacter')
+    .at(player[0], player[1])
+  }
+}
+
 // default player values, only exist to be updated by server
 window.userID = 23;
 window.playerStartLoc = [5,5];
