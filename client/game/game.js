@@ -40,6 +40,8 @@ window.healthBar = {
   drawHealthBar: function(health, playerLoc){
     var xStart = playerLoc[0]*32;
     var yStart = playerLoc[1]*32;
+    //health bar is made of red and white squares at a location
+    // relative to the player
     for (var i = 0; i < 10; i++){
       this.storage[i] = Crafty.e('2D, Canvas, Color').attr({
         x: xStart - 10 + 5*i,
