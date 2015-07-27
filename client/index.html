@@ -35,6 +35,13 @@
                  }
         });
       });
+      $('#cr-stage').keydown(function(e) {
+        if(e.keyCode === 27) {
+          $.ajax({ type: 'GET',
+                   url: '/logout'
+         })          
+        }
+      })
     </script>
   </body>
 </html>
