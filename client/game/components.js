@@ -1,8 +1,7 @@
+// This File defines all of the 'Components' used by Crafty (think of them as kinda like classes)
 
-// An "Actor" is an entity that is drawn in 2D on canvas
-//  via our logical coordinate grid
-// The Grid component allows an element to be located
-//  on a grid of tiles
+
+// This Grid component is the basis of the coordinate system used to place everything in the scene
 Crafty.c('Grid', {
   init: function() {
     this.attr({
@@ -23,12 +22,16 @@ Crafty.c('Grid', {
 });
 
 
+// An "Actor" is an entity that is drawn in 2D on canvas
+//  via the coordinate grid
 Crafty.c('Actor', {
   init: function() {
     this.requires('2D, Canvas, Grid');
   }
 });
 
+
+// The player's character
 Crafty.c('PlayerCharacter', {
   init: function() {
     this.requires('Actor, Fourway, Collision, down, SpriteAnimation')
@@ -62,6 +65,8 @@ Crafty.c('PlayerCharacter', {
 
 });
 
+
+// Mountains used for outer boundaries (originally)
 Crafty.c('Boundary', {
   init: function() {
     this.requires('Actor, Color, Solid, Image')
@@ -69,7 +74,7 @@ Crafty.c('Boundary', {
   }
 });
 
-
+// Plain old static rock
 Crafty.c('Rock', {
   init: function() {
     this.requires('Actor, Solid, Image')
@@ -77,6 +82,7 @@ Crafty.c('Rock', {
   }
 });
 
+// The enemy sprites
 Crafty.c('Enemy', {
   init: function() {
     this.requires('Actor, Image')
@@ -84,7 +90,7 @@ Crafty.c('Enemy', {
   }
 });
 
-
+// (Enemy) fireballs
 Crafty.c('Fireball', {
   init: function() {
     this.requires('Actor, SpriteAnimation, Collision, FBdown1').destroyOnSolids();
@@ -99,6 +105,7 @@ Crafty.c('Fireball', {
   }
 });
 
+// Player projectiles
 Crafty.c('playerFireball', {
   init: function() {
     this.requires('Actor, Collision, Image')
@@ -111,6 +118,7 @@ Crafty.c('playerFireball', {
   }
 });
 
+// Water tile
 Crafty.c('Water', {
   init: function() {
     this.requires('Actor, Solid ,Image')
@@ -119,6 +127,7 @@ Crafty.c('Water', {
   }
 });
 
+// Sandy Beach tile
 Crafty.c('Sand', {
   init: function() {
     this.requires('Actor, Image')
@@ -127,6 +136,7 @@ Crafty.c('Sand', {
   }
 });
 
+// Grass tile
 Crafty.c('Grass', {
   init: function() {
     this.requires('Actor, Image')

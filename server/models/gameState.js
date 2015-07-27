@@ -1,3 +1,6 @@
+// This is the main file that tracks the game state, including positions 
+// of all projectiles, enemies, and players
+
 var gameBoard = require('./randomBoard.js');
 
 var exports = module.exports = {};
@@ -23,6 +26,8 @@ var playerIdIncrementer = 0;
 // build out an options that sets
 //   enemyAmt, staticObjAmt, maxX, maxY, shotSpeed
 
+
+// Options regarding board size, projectile speed, etc...
 var options = {
   enemyAmt: 20,
   staticObjAmt: 6,
@@ -33,6 +38,7 @@ var options = {
   enemyRespawnTimeMax: 5000
 };
 
+// distance calc helper function
 var distance = function(loc1,loc2){
   return Math.pow(Math.pow(loc2[1]-loc1[1],2)+Math.pow(loc2[0]-loc1[0],2),0.5);
 };
@@ -42,18 +48,23 @@ exports.init = function(){
   // for (var j = 0; j < options.staticObjAmt; j++) {
   //   exports.addStaticObject();
   // }
+
   // create enemies
   for (var i = 0; i < options.enemyAmt; i++) {
     exports.addEnemy();
   }
 };
 
+// Handles the data sent by clients regarding current pos and shots fired
 exports.handleMessage = function(data){
+  // Update location
   for (var i = 0; i < exports.players.length; i++) {
     if(exports.players[i].pId === data.pId) {
       exports.players[i].loc = data.loc;
     }
   }
+
+  // Store fireballs in necessary format
   var time = Date.now()%1000000;
   for (var i = 0; i < data.nfb.length; i++) {
     var dirs = {'up'       : [0,-options.playerShotSpeed], 
@@ -83,6 +94,8 @@ exports.addPlayer = function(ws){
   exports.players.push(newPlayer);
 };
 
+// Adds an enemy in new random location, checking that it isn't placed 
+// too close to a player or in a boundary
 exports.addEnemy = function(){
   var newEnemy = {};
   var loc = [Math.random()*(options.maxX - 3) + 1.5,
@@ -116,6 +129,8 @@ exports.addEnemy = function(){
   exports.enemies.push(newEnemy);
 };
 
+
+// creates the random enemy movements
 exports.randomWalk = function(enemy){
   var max = 0.08;
   var oldDx = enemy.delta[0];
@@ -178,6 +193,9 @@ exports.checkCollisions = function(a, b){
      Math.abs(a.loc[1] - b.loc[1]) < 1);
 };
 
+
+// Calculates a fireballs current position based on known start pos, 
+// speed, direction, and timestamp 
 exports.vectorTransform = function(shot) {
   var x = shot.loc[0];
   var y = shot.loc[1];
@@ -193,9 +211,10 @@ exports.vectorTransform = function(shot) {
   return result;
 };
 
+
+// This is the main function which advances the game state one 'tick'
 exports.tickTime = function(){
   //move enemies around and check for collisions
-  // main server refresh loop
   for (var i = 0; i < exports.enemies.length; i++){
     exports.randomWalk(exports.enemies[i]);
     if (Math.random() < 0.02){
@@ -207,8 +226,10 @@ exports.tickTime = function(){
       exports.enemyShots.push(newShot);
     }
   }
+
   var playerShotsToRemove = [];
   var enemiesToRemove = [];
+  // Note everything that has collided
   for (var i = 0; i < exports.playerShots.length; i++){
     var shot = {loc: exports.vectorTransform(exports.playerShots[i])};
     if (shot.loc[0] > options.maxX || shot.loc[0] < 0 || shot.loc[1] < 0 || shot.loc[1] > options.maxY){
@@ -226,10 +247,14 @@ exports.tickTime = function(){
       }
     }
   }
+
+  // Set timeouts to spawn new enemies
   for (var i = 0; i < enemiesToRemove.length; i++) {
     setTimeout(exports.addEnemy, 
       (Math.random() * options.enemyRespawnTimeMax) + options.enemyRespawnTimeMin);
   }
+
+  // And remove struck enemies
   enemiesToRemove.sort(function(a,b){ return a - b; });
   for (var i = enemiesToRemove.length - 1; i >= 0; i--){
     exports.enemies.splice(enemiesToRemove[i],1);
@@ -284,6 +309,7 @@ var onScreen = function(playerLoc, thingLoc) {
           (thingLoc[1] < playerLoc[1] + 10));
 }
 
+// Builds and sends data to send to clients
 exports.sendGameStateToPlayer = function(connection, playerLoc) {
 
   var playerData = [];
@@ -293,21 +319,28 @@ exports.sendGameStateToPlayer = function(connection, playerLoc) {
 
   var data = {};
 
+  // player locations
   for (var i = 0; i < exports.players.length; i++) {
     if (onScreen(playerLoc, exports.players[i].loc)) {
       playerData.push([exports.players[i].pId , exports.players[i].loc]);
     }
   }
+
+  // enemy locations
   for (var i = 0; i < exports.enemies.length; i++) {
     if (onScreen(playerLoc, exports.enemies[i].loc)) {
       enemyData.push(exports.enemies[i].loc);
     }
   }
+
+  // enemy fireballs
   for (var i = 0; i < exports.enemyShots.length; i++) {
     if (onScreen(playerLoc, exports.vectorTransform(exports.enemyShots[i]))) {
       enemyShotsData.push(exports.vectorTransform(exports.enemyShots[i]));
     }
   }
+
+  // player fireballs
   for (var i = 0; i < exports.playerShots.length; i++) {
     if (onScreen(playerLoc, exports.vectorTransform(exports.playerShots[i]))) {
       playerShotsData.push(exports.vectorTransform(exports.playerShots[i]));
@@ -322,6 +355,7 @@ exports.sendGameStateToPlayer = function(connection, playerLoc) {
   connection.send(JSON.stringify(data));
 };
 
+// this is an object holding the world characteristics (originally)
 exports.build = {
   enemies: exports.enemies,
   staticObjects: exports.staticObjects,
@@ -330,13 +364,17 @@ exports.build = {
   board: gameBoard.boardArray
 };
 
+// Adds player starting position and ID to the build data above to send to client, 
+// so they can construct the game board and make valid websocket updates
 exports.addPosAndIdToBuild = function(){
+  var goodLoc = true;
+  var loc = [];
   do {
-    var loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
+    loc = [Math.random()*(gameBoard.boardSize - 3) + 1.5,
              Math.random()*(gameBoard.boardSize - 3) + 1.5];
     var row = Math.floor(loc[0]);
     var col = Math.floor(loc[1]);
-    var goodLoc = true;
+    goodLoc = true;
     for (var i = 0; i < exports.enemies.length; i++){
       if (distance(loc, exports.enemies[i].loc) < 3.5) {
         goodLoc = false;

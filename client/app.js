@@ -1,7 +1,7 @@
 
 var host = location.origin.replace(/^http/, 'ws');
 
-
+// Initiates the websocket connection, sets update intervals and sets the data recieve callback
 function startWebSocket() {
   window.ws = new WebSocket(host);
   console.log('sent request');
@@ -14,11 +14,13 @@ function startWebSocket() {
   };
 }
 
+// This is the function called by the button on the initial static page 
 function initBoard(data) {
   Game.start(data);
   startWebSocket();
 }
 
+// This function builds the JSON data regarding player actions and sends it to the server
 function sendUpdates() {
   var data = {
       pId: window.userID,
@@ -30,8 +32,11 @@ function sendUpdates() {
   newFireballs = [];
 }
 
+
+// This function is called everytime new websocket data is recieved
 function updateBoard(msg) {
   var data = JSON.parse(msg.data);
+  // Clear the board
   window.enemies.clearEnemies();
   window.fireballs.clearFireballs();
 
@@ -45,6 +50,7 @@ function updateBoard(msg) {
       window.userID = getMaxInArray(data.players)+1;
     }
 
+    // Loop through and replace enemies, fireballs in new positions
     for (var i = 0; i < data.enemies.length; i++) {
       window.enemies.addEnemy(data.enemies[i]);
     }

@@ -1,3 +1,5 @@
+// This file handles creation of the random 'island' board (with MATH!)
+
 var exports = module.exports = {};
 
 exports.boardSize = 50;
