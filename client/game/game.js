@@ -53,8 +53,15 @@ window.enemies = {
 window.players = {
   playerNum: 0,
   addPlayer: function(player) {
-    this.storage[this.playerNum++] = Crafty.e('PlayerCharacter')
+    this.storage[this.playerNum++] = Crafty.e('OtherPlayer')
     .at(player[0], player[1])
+  },
+  clearPlayers: function() {
+    Crafty("Enemy").each(function(i)){
+      this.destroy();
+    }
+    this.storage = {};
+    this.playerNum = 0;
   }
 }
 
