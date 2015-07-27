@@ -2,6 +2,6 @@
 var pg = require('pg');
 
 var db = new pg.Client();
-db.connect();
+db.connect(process.env.DATABASE_URL);
 
 exports.db = db;
