@@ -7,7 +7,7 @@ function startWebSocket() {
   console.log('sent request');
   ws.onopen = function(e) {
     console.log('socket open');
-    setInterval(sendUpdates, 100);
+    window.updateIntID = setInterval(sendUpdates, 100);
     ws.onmessage = function(e) {
       updateBoard(e);
     };
@@ -44,6 +44,7 @@ function updateBoard(msg) {
   if (data.gameLost) {
     console.log('game over');
     ws.close();
+    clearInterval(window.updateIntID);
     Crafty.scene("GameOver");
   } else {
     // If user ID not set, set it to the max playerId in server plus 1
