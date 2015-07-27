@@ -62,7 +62,9 @@ function updateBoard(msg) {
       window.fireballs.addFireball(data.enemyShotsData[i]);
     }
     for (var i = 0; i < data.players.length; i++) {
-      window.players.addPlayer(data.players[i][1]);
+      if (data.players[i][0] !== window.userID){
+        window.players.addPlayer(data.players[i][1]);
+      }
     }
   }
 }
