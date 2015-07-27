@@ -57,9 +57,9 @@ window.players = {
     .at(player[0], player[1])
   },
   clearPlayers: function() {
-    Crafty("Enemy").each(function(i)){
+    Crafty("Enemy").each(function(i){
       this.destroy();
-    }
+    });
     this.storage = {};
     this.playerNum = 0;
   }
