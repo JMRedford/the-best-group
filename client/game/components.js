@@ -45,8 +45,6 @@ Crafty.c('PlayerCharacter', {
       .reel('down', 1, 0, 0, 1)
       .reel('right', 1, 0, 2, 1)
       .reel('left', 1, 0, 3, 1);
-
-
   },
 
   stopOnSolids: function() {

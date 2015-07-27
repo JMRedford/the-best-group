@@ -7,9 +7,9 @@
 Crafty.scene('Loading', function(data){
   // Draw some text for the player to see in case the file
   //  takes a noticeable amount of time to load
-  Crafty.e('2D, DOM, Text')
-    .text('Loading...')
-    .attr({ x: 0, y: Game.height()/2 - 24, w: Game.width() });
+ Crafty.e('2D, DOM, Text')
+    .text('Loading...').textFont({ size: '40px' })
+
   // Load the sprite map images
   Crafty.load({"images":['sprites/gokuSprite.png', 
                          'sprites/FB.png',
