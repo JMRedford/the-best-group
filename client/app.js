@@ -37,13 +37,13 @@ function updateBoard(msg) {
 
   if (data.gameLost) {
     console.log('game over');
+    ws.close();
     Crafty.scene("GameOver");
   } else {
     // If user ID not set, set it to the max playerId in server plus 1
     if (!window.userID) {
       window.userID = getMaxInArray(data.players)+1;
     }
-    
 
     for (var i = 0; i < data.enemies.length; i++) {
       window.enemies.addEnemy(data.enemies[i]);

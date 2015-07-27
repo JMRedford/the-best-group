@@ -62,18 +62,23 @@ Crafty.scene('Game', function(data) {
 
   window.board = []
   window.boardCtr = 0;
-    
-  for (var i = 0; i < data.board.length; i++){
-    for (var j = 0; j < data.board[i].length; j++){
-      if (data.board[i][j] === 'w'){
-        window.board[boardCtr++] = Crafty.e('Water').at(i,j);
-      } else if (data.board[i][j] === 's'){
-        window.board[boardCtr++] = Crafty.e('Sand').at(i,j);
-      } else if (data.board[i][j] === 'g'){
-        window.board[boardCtr++] = Crafty.e('Grass').at(i,j);
+  window.data=data;
+  
+  window.setBoard = function() {
+    for (var i = 0; i < window.data.board.length; i++){
+      for (var j = 0; j < window.data.board[i].length; j++){
+        if (window.data.board[i][j] === 'w'){
+          window.board[boardCtr++] = Crafty.e('Water').at(i,j);
+        } else if (window.data.board[i][j] === 's'){
+          window.board[boardCtr++] = Crafty.e('Sand').at(i,j);
+        } else if (window.data.board[i][j] === 'g'){
+          window.board[boardCtr++] = Crafty.e('Grass').at(i,j);
+        }
       }
     }
   }
+
+  window.setBoard()
 
   // window.bg = Crafty.e("2D, Canvas, Image")
   // .attr({w: 1000, h: 1000})
@@ -123,25 +128,22 @@ Crafty.scene('Game', function(data) {
 // GameOver Scene: Shows Background Image and text telling user they lost and how to play again or logout
 Crafty.scene('GameOver', function() {
   
-  Crafty.e("2D, Canvas, Image")
-  .attr({w: 1000, h: 1000})
-  .image("sprites/landscape.png", "repeat");
-  
+  window.setBoard()  
+
   var text1 = Crafty.e("2D, Canvas, Text").textFont({ size: '40px', weight: 'bold' })
               .text('Game Over')
               .attr({x:Game.width()/2, y: Game.height()/2-50, w: Game.width() });
-
   var text2 = Crafty.e("2D, Canvas, Text").textFont({ size: '20px', weight: 'bold' })
               .text("ESC to logout, Enter to play again")
               .attr({x:Game.width()/2, y: Game.height()/2, w: Game.width() });
   
   Crafty.viewport.follow(text1,Game.width()/2,0);
-  Crafty.viewport.scale(0.65);
+  Crafty.viewport.scale(0.45);
   
   text1.requires('Keyboard')
   .bind('KeyDown', function (e) { 
     if (e.key === Crafty.keys.ENTER) {
-      Crafty.scene('Loading');
+     initBoard(window.data)
     }
     else if (e.key === Crafty.keys.ESC) {
       // Logout 
