@@ -44,6 +44,10 @@ app.get('/login', function (req, res) {
   res.render('login.html', { user: req.user });
 });
 
+app.get('/logout', function (req, res) {
+  req.logout();
+  res.redirect('/login');
+});
 
 
 //set up an options object that will contain
