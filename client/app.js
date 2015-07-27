@@ -39,6 +39,7 @@ function updateBoard(msg) {
   // Clear the board
   window.enemies.clearEnemies();
   window.fireballs.clearFireballs();
+  window.players.clearPlayers();
 
   if (data.gameLost) {
     console.log('game over');
