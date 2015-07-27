@@ -41,7 +41,7 @@ function updateBoard(msg) {
   window.fireballs.clearFireballs();
   window.players.clearPlayers();
   window.healthBar.clearHealthBar();
-
+  // Close web sockets, and go to game over scene if web lost
   if (data.gameLost) {
     console.log('game over');
     ws.close();
@@ -71,17 +71,12 @@ function updateBoard(msg) {
     }
   }
 }
+
 // Helper functions:
+// Get max number in array; if array is empty, returns 0
 function getMaxInArray(numArray) {
-  if (numArray.length === 0) {return 0;}
+  if (numArray.length === 0) {return 0 }
   return Math.max.apply(null, numArray);
 }
-function contains(array, value) {
-  for (var j = 0; j < array.length; j++) {
-    if (array[j][0] === value) {
-      return true;
-    }
-  }
-  return false;
-}
+
 

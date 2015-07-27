@@ -1,5 +1,6 @@
 // This File defines all of the 'Components' used by Crafty (think of them as kinda like classes)
-
+// See crafty documentaition for more on Components
+// Also this is a good crafty tutorial: http://buildnewgames.com/introduction-to-crafty/; 
 
 // This Grid component is the basis of the coordinate system used to place everything in the scene
 Crafty.c('Grid', {
@@ -21,7 +22,6 @@ Crafty.c('Grid', {
   }
 });
 
-
 // An "Actor" is an entity that is drawn in 2D on canvas
 //  via the coordinate grid
 Crafty.c('Actor', {
@@ -29,7 +29,6 @@ Crafty.c('Actor', {
     this.requires('2D, Canvas, Grid');
   }
 });
-
 
 // The player's character
 Crafty.c('PlayerCharacter', {
@@ -62,7 +61,6 @@ Crafty.c('PlayerCharacter', {
   },
 
 });
-
 
 // Mountains used for outer boundaries (originally)
 Crafty.c('Boundary', {

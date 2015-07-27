@@ -23,33 +23,33 @@ Crafty.scene('Loading', function(data){
 
 // These lines tell Crafty which squares in the sprite map are frames for which animations
     Crafty.sprite(32, 'sprites/gokuSprite.png', {
-     down :         [0, 0],
-     downWalk1 :    [1, 0],
-     downWalk2 :    [2, 0],
-     up  :          [1, 0],
-     upWalk1   :    [1, 1],
-     upWalk2   :    [1, 2],
-     right:         [2, 0],
-     rightWalk1:    [2, 1],
-     rightWalk2:    [2, 2],
-     left  :        [3, 0],
-     leftWalk1 :    [3, 1],
-     leftWalk2 :    [3, 2]
+     down      :  [0, 0],
+     downWalk1 :  [1, 0],
+     downWalk2 :  [2, 0],
+     up        :  [1, 0],
+     upWalk1   :  [1, 1],
+     upWalk2   :  [1, 2],
+     right     :  [2, 0],
+     rightWalk1:  [2, 1],
+     rightWalk2:  [2, 2],
+     left      :  [3, 0],
+     leftWalk1 :  [3, 1],
+     leftWalk2 :  [3, 2]
     });
 
     Crafty.sprite(32, 'sprites/FB.png', {
-      FBdown1: [0,0],
-      FBdown2: [0,1],
-      FBdown3: [0,2],
-      FBleft1: [1,0],
-      FBleft2: [1,1],
-      FBleft3: [1,2],
-      FBright1: [2,0],
-      FBright2: [2,1],
-      FBright3: [2,2],
-      FBup1: [3,0],
-      FBup2: [3,1],
-      FBup3: [3,2]
+      FBdown1 :   [0,0],
+      FBdown2 :   [0,1],
+      FBdown3 :   [0,2],
+      FBleft1 :   [1,0],
+      FBleft2 :   [1,1],
+      FBleft3 :   [1,2],
+      FBright1:   [2,0],
+      FBright2:   [2,1],
+      FBright3:   [2,2],
+      FBup1   :   [3,0],
+      FBup2   :   [3,1],
+      FBup3   :   [3,2]
     });
 
     Crafty.scene('Game',data);
@@ -67,9 +67,12 @@ Crafty.scene('Game', function(data) {
 
   window.board = [];
   window.boardCtr = 0;
+
+  // Data saved to window, to be used again in gameover scene and restart 
   window.data=data;
   
   // Sets the board to an array of tiles defined in the response to the '/start' GET request
+  // Crafty.e establishes something as a Crafty entity (see Crafty documentation)
   window.setBoard = function() {
     for (var i = 0; i < window.data.board.length; i++){
       for (var j = 0; j < window.data.board[i].length; j++){
@@ -148,20 +151,20 @@ Crafty.scene('GameOver', function() {
   var text1 = Crafty.e("2D, Canvas, Text").textFont({ size: '40px', weight: 'bold' })
               .text('Game Over')
               .attr({x:Game.width()/2, y: Game.height()/2-50, w: Game.width() });
+
   var text2 = Crafty.e("2D, Canvas, Text").textFont({ size: '20px', weight: 'bold' })
               .text("ESC to logout, Enter to play again")
               .attr({x:Game.width()/2, y: Game.height()/2, w: Game.width() });
   
+  // Makes sure the view is centered on the text "Game OVer"
   Crafty.viewport.follow(text1,Game.width()/2,0);
   Crafty.viewport.scale(0.45);
   
+  // If Enter is pressed, restarts the game
   text1.requires('Keyboard')
   .bind('KeyDown', function (e) { 
     if (e.key === Crafty.keys.ENTER) {
      initBoard(window.data);
-    }
-    else if (e.key === Crafty.keys.ESC) {
-      // Logout 
     }
    });
 });
