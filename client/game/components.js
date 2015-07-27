@@ -82,6 +82,13 @@ Crafty.c('Rock', {
   }
 });
 
+Crafty.c('OtherPlayer', {
+  init: function() {
+    this.requires('Actor, Image')
+    .image('sprites/Krillin.png')
+  }
+})
+
 // The enemy sprites
 Crafty.c('Enemy', {
   init: function() {
