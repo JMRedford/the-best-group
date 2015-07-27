@@ -130,7 +130,7 @@ Crafty.c('Water', {
   init: function() {
     this.requires('Actor, Solid ,Image')
       .image('sprites/Water.png');
-    this.z = -1;
+    this.z = 0;
   }
 });
 
@@ -139,7 +139,7 @@ Crafty.c('Sand', {
   init: function() {
     this.requires('Actor, Image')
       .image('sprites/Sand.png');
-    this.z = -1;
+    this.z = 0;
   }
 });
 
@@ -148,7 +148,7 @@ Crafty.c('Grass', {
   init: function() {
     this.requires('Actor, Image')
       .image('sprites/Grass.png');
-    this.z = -1;
+    this.z = 0;
   }
 });
 

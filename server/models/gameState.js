@@ -30,6 +30,7 @@ var playerIdIncrementer = 0;
 // Options regarding board size, projectile speed, etc...
 var options = {
   enemyAmt: 10,
+  playerMaxHealth: 10,
   staticObjAmt: 6,
   maxX: 50,
   maxY: 50,
@@ -88,10 +89,12 @@ exports.handleMessage = function(data){
 
 exports.addPlayer = function(ws){
   var newPlayer = {};
+  newPlayer.hit = false;
   newPlayer.conn = ws;
   newPlayer.pId = exports.build.pId;
   newPlayer.loc = [exports.build.playerStartX, exports.build.playerStartY];
   exports.players.push(newPlayer);
+  newPlayer.health = options.playerMaxHealth;
 };
 
 // Adds an enemy in new random location, checking that it isn't placed 
@@ -275,11 +278,19 @@ exports.tickTime = function(){
 
   var playersToRemove = [];
   for (var i = 0; i < exports.players.length; i++){
+    if (exports.players[i].hit && exports.players[i].hitTime < Date.now() - 500){
+      exports.players[i].hit = false;
+    }
     for (var j = 0; j < exports.enemyShots.length; j++){
       var shot = {loc: exports.vectorTransform(exports.enemyShots[j])}
       if (exports.players[i].loc){
-        if (exports.checkCollisions(exports.players[i],shot)){
-          playersToRemove.push(i);
+        if (exports.checkCollisions(exports.players[i],shot) && !exports.players[i].hit){
+          exports.players[i].health--;
+          exports.players[i].hit = true;
+          exports.players[i].hitTime = Date.now();
+          if (exports.players[i].health <= 0){
+            playersToRemove.push(i);
+          }
         }
       }
     }
@@ -294,7 +305,7 @@ exports.tickTime = function(){
   for (var i = exports.players.length - 1; i >= 0; i--){
     try {
 
-      exports.sendGameStateToPlayer(exports.players[i].conn, exports.players[i].loc);
+      exports.sendGameStateToPlayer(exports.players[i]);
     } catch (err){
       //remove player from array
       exports.players.splice(i,1);
@@ -310,12 +321,15 @@ var onScreen = function(playerLoc, thingLoc) {
 }
 
 // Builds and sends data to send to clients
-exports.sendGameStateToPlayer = function(connection, playerLoc) {
+exports.sendGameStateToPlayer = function(player) {
+  playerLoc = player.loc;
+  connection = player.conn;
 
   var playerData = [];
   var enemyData = [];
   var playerShotsData = [];
   var enemyShotsData = [];
+
 
   var data = {};
 
@@ -351,6 +365,7 @@ exports.sendGameStateToPlayer = function(connection, playerLoc) {
   data.playerShotsData = playerShotsData;
   data.enemyShotsData = enemyShotsData;
   data.enemies = enemyData;
+  data.health = player.health;
 
   connection.send(JSON.stringify(data));
 };

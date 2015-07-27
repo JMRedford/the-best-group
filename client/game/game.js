@@ -30,6 +30,33 @@ window.fireballs = {
   storage: {}
 };
 
+window.healthBar = {
+  storage: [],
+  clearHealthBar: function (){
+    for (var i = 0; i < this.storage.length; i++){
+      this.storage[i].destroy();
+    }
+  },
+  drawHealthBar: function(health, playerLoc){
+    var xStart = playerLoc[0]*32;
+    var yStart = playerLoc[1]*32;
+    for (var i = 0; i < 10; i++){
+      this.storage[i] = Crafty.e('2D, Canvas, Color').attr({
+        x: xStart - 10 + 5*i,
+        y: yStart - 20,
+        w: 5,
+        h: 5
+      }).color('white');
+      this.storage[i].z = 1;
+      if (i < health) {
+        this.storage[i].color('red');
+      } else {
+        this.storage[i].color('white');
+      }
+    }
+    
+  }
+}
 
 // Enemies object that works the same way as the fireball object above
 window.enemies = {
