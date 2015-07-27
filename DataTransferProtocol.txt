@@ -16,6 +16,7 @@ Initial data from Server to Client: (sent before websocket connection via a get 
 Ongoing data from Server to Client:
 
 {
+  health: #
   players: [[pId,[x,y]],...]
   enemies: [[x,y],..]
   playerShotsData: [[x,y],...]

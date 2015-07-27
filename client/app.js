@@ -40,6 +40,7 @@ function updateBoard(msg) {
   window.enemies.clearEnemies();
   window.fireballs.clearFireballs();
   window.players.clearPlayers();
+  window.healthBar.clearHealthBar();
 
   if (data.gameLost) {
     console.log('game over');
@@ -47,6 +48,7 @@ function updateBoard(msg) {
     clearInterval(window.updateIntID);
     Crafty.scene("GameOver");
   } else {
+    window.healthBar.drawHealthBar(data.health, [window.player.at().x,window.player.at().y]);
     // If user ID not set, set it to the max playerId in server plus 1
     if (!window.userID) {
       window.userID = getMaxInArray(data.players)+1;

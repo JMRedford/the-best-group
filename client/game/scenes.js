@@ -74,11 +74,14 @@ Crafty.scene('Game', function(data) {
     for (var i = 0; i < window.data.board.length; i++){
       for (var j = 0; j < window.data.board[i].length; j++){
         if (window.data.board[i][j] === 'w'){
-          window.board[boardCtr++] = Crafty.e('Water').at(i,j);
+          window.board[boardCtr] = Crafty.e('Water').at(i,j);
+          window.board[boardCtr++].z = 0; 
         } else if (window.data.board[i][j] === 's'){
-          window.board[boardCtr++] = Crafty.e('Sand').at(i,j);
+          window.board[boardCtr] = Crafty.e('Sand').at(i,j);
+          window.board[boardCtr++].z = 0;
         } else if (window.data.board[i][j] === 'g'){
-          window.board[boardCtr++] = Crafty.e('Grass').at(i,j);
+          window.board[boardCtr] = Crafty.e('Grass').at(i,j);
+          window.board[boardCtr++].z = 0;
         }
       }
     }
