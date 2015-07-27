@@ -52,7 +52,7 @@ gameState.init();
 
 setInterval(gameState.tickTime, 30);
 
-app.get('/', function (req, res) {
+app.get('/', isLoggedIn, function (req, res) {
   res.render('index.html', { user: req.user });
 });
 
@@ -71,14 +71,15 @@ app.ws('/', function (ws, req) {
 });
 
 
-function isLoggedIn(req, res, next) {
-  if(req.isAuthenticated()) {
-    return next();
-  } else {
-    res.redirect('/login');
-  }
-}
 
 
 app.listen(process.env.PORT || 3000);
 console.log('Server listening on 3000');
+
+
+function isLoggedIn(req, res, next) {
+  if(req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
