@@ -1,17 +1,6 @@
 var db = require('../db/connection.js').db;
 
-// Utility database functions
-
-exports.getAllUsers = function(cb) {
-  var queryStr = "SELECT * FROM users;";
-  db.query(queryStr, function(err, results) {
-    if(err) {
-      console.log("Error in querying all users");
-    } else {
-      cb(null, results.rows);
-    }
-  });
-}
+// Utility database functions, utilized in config/passport.js
 
 exports.queryByGitHubId = function(id, cb) {
   var queryStr = "SELECT * FROM users WHERE github_id = "

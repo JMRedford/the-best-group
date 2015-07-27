@@ -1,5 +1,7 @@
--- In terminal run 'psql' if installed and running
+-- Recommend downloading postgres app
 
+-- In terminal go to the server/db directory and run 'psql < schema.sql'
+-- This sets up the schema and tables, then run 'psql' to enter command 
 -- \c [database-name] connects to db, look for test
 -- \d [table-name] describes table, look for "users"
 -- \q quits the shell
