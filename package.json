@@ -20,6 +20,6 @@
     "request": "^2.60.0"
   },
     "scripts": {
-    "start": "node ./server/old-main-server.js"
+    "start": "node ./server/main-server.js"
   }
 }
